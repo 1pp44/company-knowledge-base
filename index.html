@@ -3,116 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global-Biz-Brain | 品牌与业务大脑</title>
+    <title>Global-Biz-Brain | Horizon Grove Replica</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 引入高级感字体：复刻原图的衬线与无衬线混搭 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
         :root {
-            --bg-color: #121417;
-            --sidebar-bg: #1a1d21;
-            --accent-color: #a8b8b0;
-            --accent-glow: rgba(168, 184, 176, 0.2);
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --card-glass: rgba(255, 255, 255, 0.02);
-            --border-soft: rgba(255, 255, 255, 0.05);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow-layered: 0 10px 30px -10px rgba(0,0,0,0.5), 0 4px 10px -5px rgba(0,0,0,0.3);
-            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --bg-color: #0d0d0d;
+            --accent-orange: #ff5c00;
+            --text-muted: rgba(255, 255, 255, 0.4);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        .app-container { display: flex; min-height: 100vh; }
-        .sidebar { width: 300px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-soft); display: flex; flex-direction: column; position: fixed; height: 100vh; padding: 40px 20px; }
-        .brand-zone { margin-bottom: 50px; padding-left: 20px; }
-        .brand-zone h2 { font-size: 1.1rem; letter-spacing: 4px; color: var(--accent-color); font-weight: 300; }
-        .brand-zone p { font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; }
-        .nav-btn { padding: 16px 20px; margin-bottom: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 15px; color: var(--text-muted); transition: var(--transition-smooth); border: 1px solid transparent; }
-        .nav-btn:hover { background: var(--card-glass); color: var(--text-main); }
-        .nav-btn.active { background: var(--card-glass); color: var(--accent-color); border-color: var(--border-soft); box-shadow: var(--shadow-layered); }
-        .viewport { margin-left: 300px; flex: 1; padding: 60px; max-width: 1400px; }
-        .search-area { position: sticky; top: 40px; z-index: 100; background: rgba(18, 20, 23, 0.7); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-soft); display: flex; align-items: center; gap: 20px; margin-bottom: 60px; box-shadow: var(--shadow-layered); }
-        .search-area input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.95rem; font-weight: 300; }
-        .intro-warmth { margin-bottom: 50px; }
-        .intro-warmth span { color: var(--accent-color); font-size: 0.85rem; font-weight: 500; }
-        .intro-warmth h1 { font-size: 2.8rem; font-weight: 200; margin: 10px 0; color: #fff; }
-        .intro-warmth p { color: var(--text-muted); max-width: 600px; font-weight: 300; }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 30px; }
-        .content-card { background: var(--card-glass); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 35px; transition: var(--transition-smooth); position: relative; overflow: hidden; }
-        .content-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-color), transparent); opacity: 0; transition: 0.4s; }
-        .content-card:hover { transform: translateY(-8px); border-color: rgba(168, 184, 176, 0.3); background: rgba(255, 255, 255, 0.03); }
-        .content-card:hover::before { opacity: 1; }
-        .card-tag { font-size: 0.7rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
-        .card-title { font-size: 1.3rem; margin-bottom: 25px; font-weight: 300; color: #fff; }
-        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; }
-        .info-label { color: var(--text-muted); font-weight: 300; }
-        .info-value { color: var(--text-main); font-weight: 400; text-align: right; }
-        .script-preview { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); border-left: 2px solid var(--accent-color); cursor: pointer; }
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 1000; }
-        .modal-box { background: var(--sidebar-bg); width: 90%; max-width: 800px; margin: 8vh auto; border-radius: var(--radius-lg); border: 1px solid var(--border-soft); padding: 50px; position: relative; animation: modalPop 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        #modal-code { background: rgba(0,0,0,0.3); padding: 30px; border-radius: 16px; color: var(--accent-color); white-space: pre-wrap; margin: 30px 0; line-height: 1.8; font-family: 'Fira Code', monospace; }
-        .copy-trigger { background: var(--accent-color); border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .copy-trigger:hover { filter: brightness(1.1); }
-        @keyframes modalPop { from { transform: scale(0.95) translateY(30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        @media (max-width: 900px) { .sidebar { display: none; } .viewport { margin-left: 0; padding: 30px; } }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* --- Header: Perfect Replica --- */
+        header {
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            padding: 30px 50px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .menu-icon { font-size: 1.2rem; cursor: pointer; }
+        .logo-text { font-size: 1.2rem; letter-spacing: 6px; font-weight: 200; text-transform: uppercase; }
+        .heart-icon { font-size: 1.1rem; opacity: 0.8; }
+
+        /* --- Hero Section: The Horizon Grove Core --- */
+        .hero {
+            height: 100vh; position: relative; padding: 120px 50px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        /* 超大背景文字复刻 */
+        .hero-bg-text {
+            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+            font-size: 16vw; line-height: 0.8; font-weight: 200; letter-spacing: -5px;
+            text-transform: uppercase; white-space: nowrap; opacity: 0.9;
+            pointer-events: none; z-index: 1;
+        }
+        .hero-bg-text span { display: block; }
+        .hero-bg-text .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
+
+        /* 左侧内容块 */
+        .hero-content { position: relative; z-index: 10; max-width: 400px; margin-top: 100px; }
+        .hero-content h2 { font-size: 2.5rem; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
+        .hero-content p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 30px; }
+        .hero-btn { 
+            display: inline-block; padding: 12px 35px; border-radius: 30px; background: #fff; color: #000;
+            text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+        }
+
+        /* 底部状态栏 */
+        .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 10; }
+        .hero-info { font-size: 0.7rem; color: var(--text-muted); }
+        .hero-info div { margin-top: 5px; color: #fff; font-size: 0.9rem; font-weight: 300; }
+
+        .progress-block { width: 300px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
+        .progress-bar { width: 100%; height: 1px; background: rgba(255,255,255,0.2); position: relative; }
+        .progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: #fff; width: 85%; }
+        .progress-fill::after { content: ""; position: absolute; right: 0; top: -2px; width: 5px; height: 5px; background: #fff; border-radius: 50%; }
+
+        /* --- Section 2: SPACE THAT INSPIRES --- */
+        .quote-section { padding: 150px 50px; text-align: center; }
+        .bracket-quote { display: inline-flex; align-items: center; gap: 40px; }
+        .bracket { font-size: 5rem; font-weight: 100; color: rgba(255,255,255,0.1); }
+        .quote-text { font-size: 4.5rem; letter-spacing: 8px; font-weight: 100; text-transform: uppercase; line-height: 1; }
+        .quote-text span { display: block; }
+        .dot { color: var(--accent-orange); }
+
+        /* --- Section 3: Horizontal Grid --- */
+        .feature-grid { padding: 50px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .feature-card { position: relative; height: 250px; overflow: hidden; border-radius: 12px; }
+        .feature-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .feature-card:hover img { transform: scale(1.1); }
+        .feature-card .tag { position: absolute; bottom: 20px; left: 20px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- Section 4: Hillside Complex (Overlapping) --- */
+        .complex-section { padding: 100px 50px; position: relative; display: flex; align-items: center; }
+        .complex-img-wrap { width: 60%; position: relative; }
+        .complex-img-main { width: 100%; border-radius: 4px; }
+        .complex-img-sub { position: absolute; width: 40%; right: -10%; bottom: -10%; border: 15px solid var(--bg-color); border-radius: 4px; }
+        
+        .complex-text { 
+            width: 40%; padding-left: 80px; position: relative; z-index: 10;
+        }
+        .complex-text p { font-size: 1.1rem; font-weight: 300; line-height: 1.6; margin-bottom: 40px; }
+        .vertical-title { 
+            position: absolute; right: -50px; top: 0; font-size: 10vw; 
+            text-transform: uppercase; font-weight: 800; opacity: 0.05;
+            writing-mode: vertical-rl; pointer-events: none;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .hero-bg-text { font-size: 25vw; top: 25%; }
+            .hero-content { margin-top: 150px; }
+            .quote-text { font-size: 2.5rem; }
+            .complex-section { flex-direction: column; }
+            .complex-img-wrap, .complex-text { width: 100%; padding: 0; margin-top: 50px; }
+            .feature-grid { grid-template-columns: 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="brand-zone">
-                <h2>BIZ-BRAIN</h2>
-                <p>KNOWLEDGE SYSTEM V3.0</p>
+    <header>
+        <div class="menu-icon"><i class="fas fa-bars"></i></div>
+        <div class="logo-text">Fabriliant</div>
+        <div class="heart-icon"><i class="far fa-heart"></i></div>
+    </header>
+
+    <section class="hero">
+        <!-- 复刻：巨大的叠层标题 -->
+        <div class="hero-bg-text">
+            <span class="outline">Horizon</span>
+            <span>Grove<span class="dot">.</span></span>
+        </div>
+
+        <div class="hero-content">
+            <h2>welcome to<br>horizon grove</h2>
+            <p>A unique space where modern design meets unparalleled convenience, offering a lifestyle beyond expectations. </p>
+            <a href="#" class="hero-btn">View Apartments &rsaquo;</a>
+        </div>
+
+        <div class="hero-bottom">
+            <div class="hero-info">
+                <span>From $6570/M2</span>
+                <div>San Cassiano, Northern Italy</div>
             </div>
-            <nav id="nav-container"></nav>
-        </aside>
-        <main class="viewport">
-            <div class="search-area"><i class="fas fa-search" style="color: var(--accent-color)"></i><input type="text" id="search-input" placeholder="输入关键字，深度检索生意大脑..."></div>
-            <div id="dynamic-content">
-                <div class="intro-warmth">
-                    <span>WELCOME BACK</span>
-                    <h1>你好，子安</h1>
-                    <p>“高级”不在于堆砌，而在于克制。这是您的莫兰迪色系知识库，所有业务资产均已按层次就绪。</p>
+            <div class="progress-block">
+                <div class="progress-label">
+                    <span>Construction Progress</span>
+                    <span>85%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
                 </div>
             </div>
-        </main>
-    </div>
-    <div id="modal-overlay" class="modal-overlay">
-        <div class="modal-box">
-            <span class="close-x" style="position:absolute; right:30px; top:30px; cursor:pointer; font-size:1.5rem; color:var(--text-muted)">&times;</span>
-            <h2 id="modal-title-text" style="font-weight: 200"></h2>
-            <div id="modal-code"></div>
-            <button class="copy-trigger" id="copy-action">复制话术并跟进</button>
         </div>
-    </div>
-    <script>
-        const KNOWLEDGE = {
-            identity: { title: '信用背书', icon: '🛡️', tag: 'Identity', content: [
-                { title: '企业核心标识', items: [{ k: '品牌简称', v: 'Fabriliant' }, { k: '服务核心', v: '户外休闲用品全产业链' }, { k: '官方网址', v: 'www.fabriliant.com' }] },
-                { title: '资质资产', items: [{ k: 'ISO 9001', v: '✅ 认证通过' }, { k: 'CE / UL', v: '✅ 全品类覆盖' }, { k: '自主专利', v: '15项核心技术' }] }
-            ]},
-            products: { title: '产品库', icon: '📦', tag: 'Inventory', content: [
-                { title: '豪华罗马伞系列', items: [{ k: '型号', v: 'LY-LUX-08' }, { k: '材质', v: '航空级铝材 + 280g 涤纶布' }, { k: '卖点', v: '360°旋转、抗8级强风' }] },
-                { title: '核心报价体系', items: [{ k: 'MOQ', v: '100 PCS' }, { k: 'EXW Price', v: '$45.00 - $68.00' }, { k: '交期', v: '25-30 Days' }] }
-            ]},
-            sop: { title: '话术库', icon: '⚡', tag: 'SOP Scripts', scripts: [
-                { name: '高意向买家跟进', text: 'Hello [Name],\\n\\nRegarding your interest in the Luxury Roman Umbrella... We have a batch ready for shipment to [Country]. Would you like a real-time video inspection?' },
-                { name: '展会后客户激活', text: 'Great meeting you at the Spoga+gafa!\\n\\nAs discussed, we\'ve reserved the special 5% discount for your first sample order. Should we proceed?' }
-            ]},
-            market: { title: '市场情报', icon: '📊', tag: 'Intelligence', content: [
-                { title: 'SEO 核心池', items: [{ k: 'Top 1', v: 'Patio Umbrella Wholesale' }, { k: 'Top 2', v: 'Luxury Garden Furniture' }] },
-                { title: '竞品动态', items: [{ k: '对手 A', v: '正在主推智能遮阳系统' }, { k: '应对策略', v: '强化手工缝纫质感差异化' }] }
-            ]}
-        };
-        const nav = document.getElementById('nav-container');
-        const content = document.getElementById('dynamic-content');
-        const modal = document.getElementById('modal-overlay');
-        function init() { Object.keys(KNOWLEDGE).forEach(key => { const item = document.createElement('div'); item.className = 'nav-btn'; item.innerHTML = `<span style="font-size:1.2rem">\${KNOWLEDGE[key].icon}</span> <span>\${KNOWLEDGE[key].title}</span>`; item.onclick = () => render(key); nav.appendChild(item); }); }
-        function render(key) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); const current = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.innerText.includes(KNOWLEDGE[key].title)); current && current.classList.add('active'); const data = KNOWLEDGE[key]; let html = `<div class="intro-warmth"><span>MODULE: \${data.tag}</span><h1>\${data.title}</h1></div><div class="data-grid">`; if (data.content) { data.content.forEach(c => { html += `<div class="content-card"><span class="card-tag">\${data.tag}</span><h3 class="card-title">\${c.title}</h3>`; c.items.forEach(i => html += `<div class="info-row"><span class="info-label">\${i.k}</span><span class="info-value">\${i.v}</span></div>`); html += \`</div>\`; }); } else if (data.scripts) { data.scripts.forEach(s => { html += `<div class="content-card" onclick="openModal('\${s.name}', \\\`\${s.text.replace(/\\n/g, '\\\\n')}\\\`)"> <span class="card-tag">Ready to Copy</span><h3 class="card-title">\${s.name}</h3> <div class="script-preview">\${s.text.substring(0, 100)}...</div> </div>`; }); } html += \`</div>\`; content.innerHTML = html; }
-        window.openModal = function(title, text) { document.getElementById('modal-title-text').innerText = title; document.getElementById('modal-code').innerText = text; modal.style.display = 'block'; document.getElementById('copy-action').onclick = () => { navigator.clipboard.writeText(text).then(() => { const btn = document.getElementById('copy-action'); btn.innerText = '✅ 已存入剪贴板'; setTimeout(() => btn.innerText = '复制话术并跟进', 2000); }); }; };
-        document.querySelector('.close-x').onclick = () => modal.style.display = 'none';
-        window.onclick = (e) => { if(e.target == modal) modal.style.display = 'none'; };
-        init(); render('sop');
-    </script>
+    </section>
+
+    <section class="quote-section">
+        <div class="bracket-quote">
+            <span class="bracket">[</span>
+            <h2 class="quote-text">
+                <span>Space</span>
+                <span>That Inspires<span class="dot">.</span></span>
+            </h2>
+            <span class="bracket">]</span>
+        </div>
+    </section>
+
+    <section class="feature-grid">
+        <div class="feature-card"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=600&auto=format&fit=crop"><span class="tag">Design Suite</span></div>
+        <div class="feature-card"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600&auto=format&fit=crop"><span class="tag">Panoramic View</span></div>
+        <div class="feature-card"><img src="https://images.unsplash.com/photo-1600607687960-4a2123d7415b?q=80&w=600&auto=format&fit=crop"><span class="tag">Smart Living</span></div>
+        <div class="feature-card"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=600&auto=format&fit=crop"><span class="tag">Luxury Lounge</span></div>
+    </section>
+
+    <section class="complex-section">
+        <div class="complex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1448630360428-65456885c650?q=80&w=1000&auto=format&fit=crop" class="complex-img-main">
+            <img src="https://images.unsplash.com/photo-1464146072230-91cabc968266?q=80&w=600&auto=format&fit=crop" class="complex-img-sub">
+        </div>
+        <div class="complex-text">
+            <p>It's a private hillside complex designed for quiet living and timeless views, creating a space <span style="color:var(--accent-orange)">you'll love</span> to call home.</p>
+            <div style="font-size:0.7rem; letter-spacing:4px; text-transform:uppercase; color:var(--text-muted)">ABOUT US</div>
+            <h2 style="font-size:3rem; font-weight:200; margin-top:20px; letter-spacing:5px;">HORIZON<br>GROVE</h2>
+            <div class="vertical-title">HORIZON GROVE</div>
+        </div>
+    </section>
+
+    <footer style="padding: 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 0.6rem; letter-spacing: 3px;">
+        ? 2026 HORIZON GROVE | PERFECT REPLICA BY BIZ-BRAIN
+    </footer>
 </body>
 </html>
