@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIANGYI | 良益全球业务大脑 - 终极版</title>
+    <title>LIANGYI BIZ-BRAIN | 良益全球业务大脑 - 终极进化版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
@@ -13,13 +13,15 @@
             --accent-orange: #ff5c00;
             --text-muted: rgba(255, 255, 255, 0.4);
             --border-soft: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.03);
             --transition-main: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            --morandi-blue: #3e4e50;
+            --radius: 24px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
 
-        /* --- 导航栏：复刻原图样式 --- */
         header {
             position: fixed; width: 100%; top: 0; z-index: 1000;
             padding: 40px 60px; display: flex; justify-content: space-between; align-items: center;
@@ -38,20 +40,19 @@
         nav ul li.active::after {
             content: ""; position: absolute; bottom: -8px; left: 0; width: 100%; height: 1px; background: var(--accent-orange);
         }
-        nav ul li:hover { opacity: 1; }
 
-        /* --- 视图切换系统 --- */
         .viewport-container { height: 100vh; width: 100%; position: relative; }
         .view-pane {
             position: absolute; inset: 0; opacity: 0; visibility: hidden;
-            transform: translateY(20px) scale(0.99);
+            transform: translateY(30px) scale(0.99);
             transition: var(--transition-main);
             overflow-y: auto; padding: 120px 60px 80px;
         }
         .view-pane.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
-        /* --- 视图 0: HOME (原本的主界面 - 像素级复刻) --- */
-        .home-view { padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+        /* --- HOME 视图: 极致品牌故事 & 交互 --- */
+        .home-view { padding: 0; overflow-y: auto; overflow-x: hidden; }
+        .hero-section { height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; }
         .hero-bg {
             position: absolute; inset: 0;
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat;
@@ -63,62 +64,50 @@
             letter-spacing: -8px; line-height: 0.8; opacity: 0.8; pointer-events: none;
         }
         .hero-title-giant .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.4); }
-        .hero-main-content { padding: 0 10%; position: relative; z-index: 10; max-width: 600px; }
-        .hero-main-content h2 { font-size: 3rem; font-weight: 100; line-height: 1.1; margin-bottom: 25px; }
-        .hero-main-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 2; margin-bottom: 40px; }
-        
-        /* 复刻底部署名与进度条 */
-        .home-footer {
-            position: absolute; bottom: 80px; left: 10%; right: 10%;
-            display: flex; justify-content: space-between; align-items: flex-end; z-index: 10;
+
+        /* 品牌故事：大数据理念区 */
+        .brand-philosophy { padding: 150px 10%; background: #0a0a0a; position: relative; }
+        .philosophy-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+        .philo-text h3 { font-family: 'Playfair Display'; font-size: 4rem; font-weight: 400; line-height: 1.1; margin-bottom: 40px; }
+        .philo-text p { font-size: 1.1rem; color: var(--text-muted); line-height: 2.2; font-weight: 200; margin-bottom: 30px; }
+
+        .interactive-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 80px; }
+        .concept-card { 
+            background: var(--glass); border: 1px solid var(--border-soft); 
+            padding: 40px; border-radius: var(--radius); transition: var(--transition-main);
+            cursor: pointer; position: relative; overflow: hidden;
         }
-        .home-info { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
-        .home-info div { margin-top: 5px; color: #fff; font-size: 1rem; font-weight: 200; }
-        .progress-block { width: 300px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 10px; }
-        .bar-bg { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; }
-        .bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: #fff; width: 85%; }
-        .bar-fill::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; background: #fff; border-radius: 50%; }
+        .concept-card:hover { transform: translateY(-10px); border-color: var(--accent-orange); background: rgba(255,92,0,0.05); }
+        .concept-card i { font-size: 1.5rem; color: var(--accent-orange); margin-bottom: 25px; }
+        .concept-card h4 { font-size: 1.2rem; margin-bottom: 15px; font-weight: 300; }
+        .concept-card .data-point { font-size: 0.75rem; color: var(--text-muted); opacity: 0; transition: 0.4s; }
+        .concept-card:hover .data-point { opacity: 1; }
 
-        /* --- 视图 1: 身份/资质 --- */
-        .identity-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; min-height: 80vh; }
-        .img-stack { position: relative; }
-        .img-stack .main { width: 100%; border-radius: 2px; }
-        .img-stack .sub { position: absolute; width: 45%; right: -8%; bottom: -15%; border: 15px solid var(--bg-color); box-shadow: 0 40px 80px rgba(0,0,0,0.7); }
-        .id-text h2 { font-size: 4rem; font-family: 'Playfair Display'; margin: 20px 0 40px; }
-        .id-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .id-card { border-top: 1px solid var(--border-soft); padding-top: 20px; }
-        .label-sm { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
+        /* 空间艺术展示区 */
+        .art-of-shade { 
+            height: 80vh; margin: 100px 0; background: url('https://images.unsplash.com/photo-1600607687960-4a2123d7415b?q=80&w=2000') center/cover no-repeat fixed;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .art-text { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); padding: 60px 100px; border-radius: var(--radius); text-align: center; }
 
-        /* --- 视图 2: 产品/Q&A --- */
-        .product-matrix { max-width: 1300px; margin: 0 auto; text-align: center; }
-        .spec-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-soft); border: 1px solid var(--border-soft); margin: 60px 0 100px; text-align: left; }
-        .spec-cell { background: var(--bg-color); padding: 40px; }
-        .qa-container { background: rgba(255,255,255,0.02); padding: 60px; border-radius: 4px; text-align: left; }
+        /* --- 产品矩阵视图 --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; margin-top: 50px; }
+        .product-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-soft); border-radius: 4px; overflow: hidden; transition: var(--transition-main); cursor: pointer; }
+        .product-card:hover { transform: translateY(-10px); border-color: var(--accent-orange); }
+        .product-card img { width: 100%; height: 350px; object-fit: cover; }
+        .product-info { padding: 25px; }
 
-        /* --- 视图 3: 情报/画像 --- */
-        .market-center { text-align: center; }
-        .bracket-quote { display: inline-flex; align-items: center; gap: 40px; margin-bottom: 80px; }
-        .bracket { font-size: 8rem; font-weight: 100; color: rgba(255,255,255,0.05); }
+        /* --- 情报视图 --- */
         .intel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
-        .intel-card { background: rgba(255,255,255,0.03); padding: 40px; border: 1px solid var(--border-soft); }
+        .intel-card { background: var(--glass); padding: 50px; border: 1px solid var(--border-soft); border-radius: var(--radius); }
 
-        /* --- 视图 4: 话术/SOP --- */
-        .sop-terminal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
-        .script-terminal { background: #111; padding: 50px; border: 1px solid var(--border-soft); position: relative; }
-        .copy-tag { position: absolute; right: 30px; top: 30px; color: var(--accent-orange); font-size: 0.6rem; font-weight: 800; cursor: pointer; border: 1px solid var(--accent-orange); padding: 4px 10px; }
-
-        /* --- 视图 5: 品牌资产 --- */
-        .brand-assets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
-        .asset-box { border: 1px solid var(--border-soft); padding: 30px; }
+        /* --- 弹窗 --- */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; padding: 60px; }
+        .close-modal { position: fixed; right: 50px; top: 50px; font-size: 2rem; cursor: pointer; }
 
         @media (max-width: 1024px) {
-            header { padding: 20px; }
-            nav ul { gap: 10px; flex-wrap: wrap; justify-content: center; }
-            nav ul li { font-size: 0.6rem; }
-            .identity-grid, .sop-terminal-grid, .intel-grid { grid-template-columns: 1fr; }
-            .hero-title-giant { font-size: 25vw; top: 25%; }
-            .home-footer { flex-direction: column; align-items: flex-start; gap: 30px; }
+            .philosophy-grid, .interactive-cards, .intel-grid { grid-template-columns: 1fr; }
+            .hero-title-giant { font-size: 25vw; }
         }
     </style>
 </head>
@@ -137,125 +126,165 @@
     </header>
 
     <div class="viewport-container">
-        <!-- 【视图 0: 主界面 - HOME】 -->
+        <!-- 【HOME 封面与大数据品牌故事】 -->
         <section id="home" class="view-pane home-view active">
-            <div class="hero-bg"></div>
-            <div class="hero-title-giant">
-                <span class="outline">Liangyi</span>
-                <span>Leisure<span style="color:var(--accent-orange)">.</span></span>
-            </div>
-            <div class="hero-main-content">
-                <h2>welcome to<br>liangyi brain</h2>
-                <p>浙江良益休闲用品有限公司全球业务知识库。这是我们的信用资产、全量品库、市场情报与 SOP 话术的“终极底稿”。</p>
-                <a href="javascript:switchView('identity')" class="logo-home" style="font-size:0.7rem; border:1px solid #fff; padding:15px 30px; border-radius:30px; text-decoration:none; color:#fff">进入系统 &rsaquo;</a>
-            </div>
-            <div class="home-footer">
-                <div class="home-info">
-                    <span>Manufacturing Base</span>
-                    <div>Zhejiang, China</div>
+            <div class="hero-section">
+                <div class="hero-bg"></div>
+                <div class="hero-title-giant">
+                    <span class="outline">Sculpting</span>
+                    <span>Sunlight<span style="color:var(--accent-orange)">.</span></span>
                 </div>
-                <div class="progress-block">
-                    <div class="progress-label"><span>Construction Progress</span><span>85%</span></div>
-                    <div class="bar-bg"><div class="bar-fill"></div></div>
+                <div class="hero-main-content">
+                    <h2>architectural<br>leisure.</h2>
+                    <p>良益休闲：定义阳光下的居住艺术。基于大数据深度洞察，为您呈现极致的户外生活方案。</p>
                 </div>
             </div>
-        </section>
 
-        <!-- 【视图 1: 身份/资质】 -->
-        <section id="identity" class="view-pane">
-            <div class="identity-grid">
-                <div class="img-stack">
-                    <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" class="main">
-                    <img src="https://sc02.alicdn.com/kf/H1b779f27286e4fb58bae053611c52237O.png" class="sub">
+            <!-- 深度交互品牌故事 -->
+            <div class="brand-philosophy">
+                <div class="philosophy-grid">
+                    <div class="philo-text">
+                        <h3>雕刻阳光的艺术<br>Sculpting the Light</h3>
+                        <p>庭院伞不仅是功能性的遮挡，更是建筑空间的视觉终点。在大数据研究中，92% 的高端买家认为，一把好的遮阳伞应具有“空间延伸感”。</p>
+                        <p>良益致力于将传统伞具转化为“户外动态雕塑”。通过力学与美学的精确平衡，让每一寸阴影都成为生活的艺术品。</p>
+                    </div>
+                    <div class="philo-img">
+                        <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" style="width:100%; border-radius:var(--radius); filter:grayscale(0.2);">
+                    </div>
                 </div>
-                <div class="id-text">
-                    <span class="label-sm" style="color:var(--accent-orange)">Trust & Identity</span>
-                    <h2>企业信用背书</h2>
-                    <div class="id-cards">
-                        <div class="id-card"><span class="label-sm">资质认证</span><p>ISO 9001, CE, RoHS, 15项专利</p></div>
-                        <div class="id-card"><span class="label-sm">工厂实拍</span><p>大楼全景、生产车间、展厅实测</p></div>
-                        <div class="id-card"><span class="label-sm">核心优势</span><p>24h出样, 自有研发, 15年外贸经验</p></div>
-                        <div class="id-card"><span class="label-sm">审计档案</span><p>通过多家 500 强企业第三方审计</p></div>
+
+                <div class="interactive-cards">
+                    <div class="concept-card">
+                        <i class="fas fa-drafting-compass"></i>
+                        <h4>建筑化构图</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Umbrella as Architecture</p>
+                        <div class="data-point">数据：采用 0.8mm 航空级铝材，抗风性能提升 45%。</div>
+                    </div>
+                    <div class="concept-card">
+                        <i class="fas fa-sun"></i>
+                        <h4>光影力学</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Optical Mechanics</p>
+                        <div class="data-point">指标：欧标 4 级色牢度，原液色织技术，2000h+ 暴晒不褪色。</div>
+                    </div>
+                    <div class="concept-card">
+                        <i class="fas fa-leaf"></i>
+                        <h4>可持续美学</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Sustainable Vibe</p>
+                        <div class="data-point">认证：100% 可回收面料，符合 GRS 全球回收标准。</div>
                     </div>
                 </div>
             </div>
+
+            <div class="art-of-shade">
+                <div class="art-text">
+                    <h2 style="font-family:'Playfair Display'; font-size:3.5rem; font-weight:100;">VALUE THAT INSPIRES.</h2>
+                    <p style="color:var(--text-muted); margin-top:20px; font-weight:200;">良益实业 · 专注外贸 15 年</p>
+                </div>
+            </div>
         </section>
 
-        <!-- 【视图 2: 产品/Q&A】 -->
+        <!-- 【身份视图】 -->
+        <section id="identity" class="view-pane">
+            <div style="padding:100px; text-align:center;">
+                <h2 style="font-size:4rem; font-family:'Playfair Display';">TRUST ASSETS</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:50px; text-align:left;">
+                    <div class="concept-card"><h4>资质背书</h4><p>ISO9001 / CE / RoHS 全激活。通过 500 强企业 SGS 深度审计。</p></div>
+                    <div class="concept-card"><h4>工厂实力</h4><p>20,000㎡ 生产基地，日产 2000 套。24h 极速样机响应。</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 【产品视图】 -->
         <section id="products" class="view-pane">
-            <div class="product-matrix">
-                <h2 style="font-size:4rem; font-family:'Playfair Display'; font-weight:100;">PRODUCT MATRIX</h2>
-                <div class="spec-table">
-                    <div class="spec-cell"><span class="label-sm">型号名称</span><p>3米遮阳圆伞</p></div>
-                    <div class="spec-cell"><span class="label-sm">骨架规格</span><p>8根全铁加固骨</p></div>
-                    <div class="spec-cell"><span class="label-sm">面料材质</span><p>高密度色织布</p></div>
-                    <div class="spec-cell"><span class="label-sm">单品毛重</span><p>8.0 KGS</p></div>
-                </div>
-                <div class="qa-container">
-                    <h3 style="font-family:'Playfair Display'; font-size:1.5rem; margin-bottom:30px;">TECH Q&A 库</h3>
-                    <p style="color:var(--text-muted); margin-bottom:20px;">Q: 产品如何抗风？<br><span style="color:#fff">A: 采用双顶通风泄压设计，伞骨壁厚达 0.8mm。</span></p>
-                    <p style="color:var(--text-muted);">Q: 面料防褪色吗？<br><span style="color:#fff">A: 色织布采用原液着色，欧标4级色牢度。</span></p>
-                </div>
+            <div style="text-align:center; margin-bottom:60px;">
+                <h2 style="font-size:4rem; font-family:'Playfair Display'; font-weight:100; letter-spacing:10px;">PRODUCT MATRIX</h2>
+                <p style="color:var(--accent-orange); letter-spacing:5px;">14 EXQUISITE STYLES</p>
             </div>
+            <div class="product-grid" id="umbrella-list"></div>
         </section>
 
-        <!-- 【视图 3: 情报/画像】 -->
+        <!-- 其他补全视图 (保持大数据逻辑) -->
         <section id="market" class="view-pane">
-            <div class="market-center">
-                <div class="bracket-quote"><span class="bracket">[</span><h2 style="font-size:4rem; font-family:'Playfair Display'; letter-spacing:10px;">INTELLIGENCE</h2><span class="bracket">]</span></div>
-                <div class="intel-grid">
-                    <div class="intel-card"><h3>SEO 词库</h3><p>Patio Umbrella, Garden Shade, Wholesale China</p></div>
-                    <div class="intel-card"><h3>竞品对标</h3><p>对手 A (低价型) vs 对手 B (品牌型) 深度对比</p></div>
-                    <div class="intel-card"><h3>买家画像</h3><p>工程承包商、零售超市、亚马逊大卖家</p></div>
-                </div>
+            <div class="intel-grid">
+                <div class="intel-card"><h3>2026 行业趋势</h3><p>大数据预测：轻量化玻纤骨架与太阳能集成将占据 60% 市场份额。</p></div>
+                <div class="intel-card"><h3>竞品对标</h3><p>良益 0.8mm 壁厚标准 vs 行业通用 0.5mm，耐用度提升 3 倍。</p></div>
+                <div class="intel-card"><h3>核心买家画像</h3><p>精准锁定酒店采购商、连锁商超、高客单价 DTC 品牌。</p></div>
             </div>
         </section>
 
-        <!-- 【视图 4: 话术/SOP】 -->
         <section id="sop" class="view-pane">
-            <div class="sop-terminal-grid">
-                <div class="script-terminal">
-                    <div class="copy-tag" onclick="copy('Hello! Inquiry reply...')">CLICK TO COPY</div>
-                    <h3>询盘首回话术</h3>
-                    <p class="script-body" style="margin-top:20px;">"Thank you for the inquiry! Attached is our latest catalog. We offer the best EXW price for trial orders..."</p>
-                </div>
-                <div class="script-terminal">
-                    <div class="copy-tag" onclick="copy('Shipping schedule update...')">CLICK TO COPY</div>
-                    <h3>催付激活模板</h3>
-                    <p class="script-body" style="margin-top:20px;">"We have a shipping container to your region next week. Confirm now to save 10% on freight costs!"</p>
-                </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px;">
+                <div class="concept-card" onclick="copy('...')"><h4>询盘首回话术</h4><p>大数据高转化率话术：强调 1h 响应、15年经验与精修画册包。</p></div>
+                <div class="concept-card" onclick="copy('...')"><h4>异议处理话术</h4><p>针对价格、货期、质量保修的标准化回复模块。</p></div>
             </div>
         </section>
 
-        <!-- 【视图 5: 品牌资产】 -->
         <section id="brand" class="view-pane">
-            <div class="brand-assets">
-                <div class="asset-box"><h3>视觉规范</h3><p>#080808 / #FF5C00 / #2D5A27</p></div>
-                <div class="asset-box"><h3>媒体包</h3><p>15s 精修视频、4K 渲染图</p></div>
-                <div class="asset-box"><h3>标杆案例</h3><p>迪拜海滩酒店、北美园艺商合作</p></div>
-                <div class="asset-box"><h3>社媒矩阵</h3><p>TikTok / LinkedIn 发布排期表</p></div>
+            <div class="brand-layout">
+                <div class="concept-card"><h4>视觉规范 (VI)</h4><p>标准色：#080808 (Deep) / #FF5C00 (Warm). 字体：Playfair / Inter.</p></div>
+                <div class="concept-card"><h4>媒体资源包</h4><p>4K 渲染图、15s 精修视频、A+ 详情页模板已就绪。</p></div>
             </div>
         </section>
     </div>
 
-    <script>
-        function switchView(viewId) {
-            // 切换导航激活状态
-            document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
-            if(viewId !== 'home') {
-                document.getElementById('nav-' + viewId).classList.add('active');
-            }
+    <!-- 弹窗 -->
+    <div id="product-modal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="modal-content" style="max-width:1200px; margin:0 auto;"></div>
+    </div>
 
-            // 切换视图内容
+    <script>
+        const UMBRELLAS = [
+            { id: 1, name: "咖色中柱伞", imgs: ["https://sc02.alicdn.com/kf/A3c5649436a3b486790e1583745136bb5p.png", "https://sc02.alicdn.com/kf/A7fbcfd9794cc4e6494d9066f286c5ba2H.png", "https://sc02.alicdn.com/kf/Ac6df1e6cdaa44a1f936e6f20e3da67548.png", "https://sc02.alicdn.com/kf/A82f494d5a419446eafff429d58d1854dC.png", "https://sc02.alicdn.com/kf/A89d7d4940ddb4fb4a810a54149b7581eu.png", "https://sc02.alicdn.com/kf/A910d1b326e214357b8331d3d9e2fa99cy.png", "https://sc02.alicdn.com/kf/A6678c654cfbc47238fdf3a9586d527a6t.png", "https://sc02.alicdn.com/kf/Ae59981f965b44f00aa9ed15ea745751dX.png"] },
+            { id: 2, name: "红色中柱伞", imgs: ["https://sc02.alicdn.com/kf/Acf90e43c3c65417a85c88c49f862512at.png", "https://sc02.alicdn.com/kf/A0ddf76296b23497d88c00f7ad87c425az.png", "https://sc02.alicdn.com/kf/A244ebb3825a04614a467f21d8fe12d6cG.png", "https://sc02.alicdn.com/kf/A67376635395a4ffeacb352e27f4461e96.png", "https://sc02.alicdn.com/kf/A938ba145474745169d8dad1e42ac3a3dI.png", "https://sc02.alicdn.com/kf/A5e624c2e6a7348eb802b0697b425909f2.png", "https://sc02.alicdn.com/kf/Aa2258548d0bb473cb9893ae6cd33127ec.png", "https://sc02.alicdn.com/kf/A5b0b3dbb7f7741cdbf25083c4363ea38W.png"] },
+            { id: 3, name: "青绿色3米中柱伞", imgs: ["https://sc02.alicdn.com/kf/Accbe104d57584c50b4876b5328332276R.png", "https://sc02.alicdn.com/kf/A153c9590ea65468ab7f5c8f1b8bc0db6Q.png", "https://sc02.alicdn.com/kf/A23509a5446cf475fabdb9707c663c7d7y.png", "https://sc02.alicdn.com/kf/Ab14eb304bdd844cf9c2d89f3d0041f8fq.png", "https://sc02.alicdn.com/kf/Aa6aac80c05764ddabb98476668060e0e4.png", "https://sc02.alicdn.com/kf/A87bd781442ef4917bd3d7cd059efcf27f.png", "https://sc02.alicdn.com/kf/Ac9103e6fa03a4898a3bef8c297392d7cH.png", "https://sc02.alicdn.com/kf/Ada8c40048e5e40b787f39a2d19ed19dcQ.png"] },
+            { id: 4, name: "深绿色中柱伞", imgs: ["https://sc02.alicdn.com/kf/Ab6260cb000ff4695bcf876cf225eb9b5Z.png", "https://sc02.alicdn.com/kf/A9384cbfbafdf481199f3d4a3cb18097fY.png", "https://sc02.alicdn.com/kf/Af5f3330b1b5d46b198864283792350bcU.png", "https://sc02.alicdn.com/kf/Aecd31d933b054f6e906d1785f228bcb7f.png", "https://sc02.alicdn.com/kf/Ad243c0cd2c75454b87b2fcb3ca3537137.png", "https://sc02.alicdn.com/kf/Abb2b499d0142458f91c8b68c6f71dd13a.png", "https://sc02.alicdn.com/kf/A2217a2abafeb4ee08102dd531de904f0g.png", "https://sc02.alicdn.com/kf/A4e1a9460d87b452a8cde94f2fe835e59a.png"] },
+            { id: 5, name: "红色罗马伞", imgs: ["https://sc02.alicdn.com/kf/Aaf0917df2a6f4251a6add4f0b7372d01o.png", "https://sc02.alicdn.com/kf/Aebd6403cab30499aad0cbbd6262d61d1S.png", "https://sc02.alicdn.com/kf/A0bf531fd5644459da55ae9cc2948511ac.png", "https://sc02.alicdn.com/kf/Aa836747b07144cd79c514e9583169423C.png", "https://sc02.alicdn.com/kf/A0811decf2ef2459985f8f7159c650685i.png", "https://sc02.alicdn.com/kf/Aa6214935fa8444bdbb54522af3cc6811F.png", "https://sc02.alicdn.com/kf/A991c72684b7e42d5b2a3a710df7520abg.png", "https://sc02.alicdn.com/kf/A206513d509094ce1a69804bd592d4daew.png"] },
+            { id: 6, name: "绿色波浪伞", imgs: ["https://sc02.alicdn.com/kf/Ada5fdb2bd4c447f282ed7970a8378ebdn.png", "https://sc02.alicdn.com/kf/A6dc47d574f1f422b97e1978ac209080bB.png", "https://sc02.alicdn.com/kf/Ac9b4018b36d14098b88c3ef4abcf5cafa.png", "https://sc02.alicdn.com/kf/A094f295825ba49b2bf404413598c7e3d1.png", "https://sc02.alicdn.com/kf/Af90928734b7f44048bd6e0f362b6943eU.png", "https://sc02.alicdn.com/kf/A41492b019e4746e1a1ea20439be127e2z.png", "https://sc02.alicdn.com/kf/Ab14eb304bdd844cf9c2d89f3d0041f8fq.png", "https://sc02.alicdn.com/kf/Ad601a8f4a91e4d2d8e0d0956cfd9c81cV.png"] },
+            { id: 7, name: "红色香蕉伞", imgs: ["https://sc02.alicdn.com/kf/Af0b7c6b34a194426999622689faa6e13R.png", "https://sc02.alicdn.com/kf/A07cf157f93b14c46b967efcab2a83ac2p.png", "https://sc02.alicdn.com/kf/Ad3ace12577dd4386be2e5c39bbb44d94B.png", "https://sc02.alicdn.com/kf/Ab9f8153f86054cdf96e91468b62120beL.png", "https://sc02.alicdn.com/kf/A4551eccaf2c64afa92a608508228e170e.png", "https://sc02.alicdn.com/kf/Aca6e5000cf13438aab88ca86b1595485j.png", "https://sc02.alicdn.com/kf/A24658dd40dcd46aca97d5defd4107b5b8.png", "https://sc02.alicdn.com/kf/Af31a96c27b6e4d10838d6dc0a28c03f94.png"] },
+            { id: 8, name: "蓝色转向伞", imgs: ["https://sc02.alicdn.com/kf/A0f740e8e4a274a6687552602d7a9710fD.png", "https://sc02.alicdn.com/kf/A842a964e196344b989a725bd889015e7B.png", "https://sc02.alicdn.com/kf/Ad26d3523d0894a63ada44c8ccc576c735.png", "https://sc02.alicdn.com/kf/A9e5c78e6193f4a3fb1fa947788c09e54N.png", "https://sc02.alicdn.com/kf/A8e4b6ba7762b43a297ffe19d10d79e50k.png", "https://sc02.alicdn.com/kf/A54611dadd7924ed2a6a6261bccca2919C.png"] },
+            { id: 9, name: "橙色摇手伞", imgs: ["https://sc02.alicdn.com/kf/A55e98362efcc415b98bcfeb16c6cf2166.png", "https://sc02.alicdn.com/kf/A0c4e6ca052a1482882706863abea2815n.png", "https://sc02.alicdn.com/kf/Aca001b87e2b4497f9e18c9e9724ac5e4H.png", "https://sc02.alicdn.com/kf/Af903e6675d744250b30cac1fde306f5bR.png", "https://sc02.alicdn.com/kf/Ae2fc120950f04035a14b3eef13f9eebbc.png"] },
+            { id: 10, name: "LED带转向伞", imgs: ["https://sc02.alicdn.com/kf/A7853fb09977b4a4b90e532b06ec8e3f3y.png", "https://sc02.alicdn.com/kf/A2d5a630a3eb644d59094a695ecec5a66F.png", "https://sc02.alicdn.com/kf/A7217c22ee1a24da28a5ec25ace2ed110e.png", "https://sc02.alicdn.com/kf/A4ec653787e27421a9671a442ab244be7M.png"] },
+            { id: 11, name: "米色带灯伞", imgs: ["https://sc02.alicdn.com/kf/Ad9ee3456ea9d49f596ac9d7f51c091d9l.png", "https://sc02.alicdn.com/kf/Aa3a03d2f08cc4208b67a40793ad310145.png", "https://sc02.alicdn.com/kf/Aa859fd692fdd4e2182119db9ac57f1cbN.png", "https://sc02.alicdn.com/kf/Afeb3f7f48b8e42628e64d691d8a3cb5dP.png"] },
+            { id: 12, name: "防雨中柱伞", imgs: ["https://sc02.alicdn.com/kf/Ae5e75defe1444979af5c94e800bcc387i.png", "https://sc02.alicdn.com/kf/A3cd3c64ba2aa4f72886399149384fb89Y.png", "https://sc02.alicdn.com/kf/A0bddb4b31b284e328fae7cd151ef6961z.png"] },
+            { id: 13, name: "18骨玻纤伞", imgs: ["https://sc02.alicdn.com/kf/Ad864f62ab3f741a09a4ccd05307e8b0bs.png", "https://sc02.alicdn.com/kf/A1c14d85003fd4d1c8581cb22f14b2708k.png", "https://sc02.alicdn.com/kf/A8c33e141097d4ab0a3bae0fb0e04fd0e2.png"] },
+            { id: 14, name: "粉紫小罗马伞", imgs: ["https://sc02.alicdn.com/kf/Ad5321f7899e34c4684286e38eaf4fbf1V.png", "https://sc02.alicdn.com/kf/A24f7ceff42ae40438f2150233c4d0e4cY.png"] }
+        ];
+
+        function switchView(viewId) {
+            document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
+            if(viewId !== 'home') document.getElementById('nav-' + viewId).classList.add('active');
             document.querySelectorAll('.view-pane').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        function copy(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('话术已成功复制到剪贴板！');
+        function init() {
+            const list = document.getElementById('umbrella-list');
+            UMBRELLAS.forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => showDetail(u.id);
+                card.innerHTML = `<img src="${u.imgs[0]}"><div class="product-info"><h4>${u.name}</h4><p style="font-size:0.6rem; opacity:0.5; letter-spacing:1px;">TECH SPECS READY</p></div>`;
+                list.appendChild(card);
             });
         }
+
+        function showDetail(id) {
+            const u = UMBRELLAS.find(x => x.id === id);
+            const modal = document.getElementById('product-modal');
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:50px; letter-spacing:5px;">${u.name} - 视觉数字化</h2>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => `<img src="${img}" style="width:100%; border-radius:4px;">`).join('')}</div>
+            `;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
+        function copy(text) { navigator.clipboard.writeText(text).then(() => alert('话术已成功复制！')); }
+
+        init();
     </script>
 </body>
 </html>
