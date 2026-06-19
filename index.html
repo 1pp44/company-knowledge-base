@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global-Biz-Brain | 品牌与业务大脑</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121417;
+            --sidebar-bg: #1a1d21;
+            --accent-color: #a8b8b0;
+            --accent-glow: rgba(168, 184, 176, 0.2);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --card-glass: rgba(255, 255, 255, 0.02);
+            --border-soft: rgba(255, 255, 255, 0.05);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow-layered: 0 10px 30px -10px rgba(0,0,0,0.5), 0 4px 10px -5px rgba(0,0,0,0.3);
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar { width: 300px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-soft); display: flex; flex-direction: column; position: fixed; height: 100vh; padding: 40px 20px; }
+        .brand-zone { margin-bottom: 50px; padding-left: 20px; }
+        .brand-zone h2 { font-size: 1.1rem; letter-spacing: 4px; color: var(--accent-color); font-weight: 300; }
+        .brand-zone p { font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; }
+        .nav-btn { padding: 16px 20px; margin-bottom: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 15px; color: var(--text-muted); transition: var(--transition-smooth); border: 1px solid transparent; }
+        .nav-btn:hover { background: var(--card-glass); color: var(--text-main); }
+        .nav-btn.active { background: var(--card-glass); color: var(--accent-color); border-color: var(--border-soft); box-shadow: var(--shadow-layered); }
+        .viewport { margin-left: 300px; flex: 1; padding: 60px; max-width: 1400px; }
+        .search-area { position: sticky; top: 40px; z-index: 100; background: rgba(18, 20, 23, 0.7); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-soft); display: flex; align-items: center; gap: 20px; margin-bottom: 60px; box-shadow: var(--shadow-layered); }
+        .search-area input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.95rem; font-weight: 300; }
+        .intro-warmth { margin-bottom: 50px; }
+        .intro-warmth span { color: var(--accent-color); font-size: 0.85rem; font-weight: 500; }
+        .intro-warmth h1 { font-size: 2.8rem; font-weight: 200; margin: 10px 0; color: #fff; }
+        .intro-warmth p { color: var(--text-muted); max-width: 600px; font-weight: 300; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 30px; }
+        .content-card { background: var(--card-glass); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 35px; transition: var(--transition-smooth); position: relative; overflow: hidden; }
+        .content-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-color), transparent); opacity: 0; transition: 0.4s; }
+        .content-card:hover { transform: translateY(-8px); border-color: rgba(168, 184, 176, 0.3); background: rgba(255, 255, 255, 0.03); }
+        .content-card:hover::before { opacity: 1; }
+        .card-tag { font-size: 0.7rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
+        .card-title { font-size: 1.3rem; margin-bottom: 25px; font-weight: 300; color: #fff; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; }
+        .info-label { color: var(--text-muted); font-weight: 300; }
+        .info-value { color: var(--text-main); font-weight: 400; text-align: right; }
+        .script-preview { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); border-left: 2px solid var(--accent-color); cursor: pointer; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 1000; }
+        .modal-box { background: var(--sidebar-bg); width: 90%; max-width: 800px; margin: 8vh auto; border-radius: var(--radius-lg); border: 1px solid var(--border-soft); padding: 50px; position: relative; animation: modalPop 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        #modal-code { background: rgba(0,0,0,0.3); padding: 30px; border-radius: 16px; color: var(--accent-color); white-space: pre-wrap; margin: 30px 0; line-height: 1.8; font-family: 'Fira Code', monospace; }
+        .copy-trigger { background: var(--accent-color); border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .copy-trigger:hover { filter: brightness(1.1); }
+        @keyframes modalPop { from { transform: scale(0.95) translateY(30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        @media (max-width: 900px) { .sidebar { display: none; } .viewport { margin-left: 0; padding: 30px; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand-zone">
+                <h2>BIZ-BRAIN</h2>
+                <p>KNOWLEDGE SYSTEM V3.0</p>
+            </div>
+            <nav id="nav-container"></nav>
+        </aside>
+        <main class="viewport">
+            <div class="search-area"><i class="fas fa-search" style="color: var(--accent-color)"></i><input type="text" id="search-input" placeholder="输入关键字，深度检索生意大脑..."></div>
+            <div id="dynamic-content">
+                <div class="intro-warmth">
+                    <span>WELCOME BACK</span>
+                    <h1>你好，子安</h1>
+                    <p>“高级”不在于堆砌，而在于克制。这是您的莫兰迪色系知识库，所有业务资产均已按层次就绪。</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-x" style="position:absolute; right:30px; top:30px; cursor:pointer; font-size:1.5rem; color:var(--text-muted)">&times;</span>
+            <h2 id="modal-title-text" style="font-weight: 200"></h2>
+            <div id="modal-code"></div>
+            <button class="copy-trigger" id="copy-action">复制话术并跟进</button>
+        </div>
+    </div>
+    <script>
+        const KNOWLEDGE = {
+            identity: { title: '信用背书', icon: '🛡️', tag: 'Identity', content: [
+                { title: '企业核心标识', items: [{ k: '品牌简称', v: 'Fabriliant' }, { k: '服务核心', v: '户外休闲用品全产业链' }, { k: '官方网址', v: 'www.fabriliant.com' }] },
+                { title: '资质资产', items: [{ k: 'ISO 9001', v: '✅ 认证通过' }, { k: 'CE / UL', v: '✅ 全品类覆盖' }, { k: '自主专利', v: '15项核心技术' }] }
+            ]},
+            products: { title: '产品库', icon: '📦', tag: 'Inventory', content: [
+                { title: '豪华罗马伞系列', items: [{ k: '型号', v: 'LY-LUX-08' }, { k: '材质', v: '航空级铝材 + 280g 涤纶布' }, { k: '卖点', v: '360°旋转、抗8级强风' }] },
+                { title: '核心报价体系', items: [{ k: 'MOQ', v: '100 PCS' }, { k: 'EXW Price', v: '$45.00 - $68.00' }, { k: '交期', v: '25-30 Days' }] }
+            ]},
+            sop: { title: '话术库', icon: '⚡', tag: 'SOP Scripts', scripts: [
+                { name: '高意向买家跟进', text: 'Hello [Name],\\n\\nRegarding your interest in the Luxury Roman Umbrella... We have a batch ready for shipment to [Country]. Would you like a real-time video inspection?' },
+                { name: '展会后客户激活', text: 'Great meeting you at the Spoga+gafa!\\n\\nAs discussed, we\'ve reserved the special 5% discount for your first sample order. Should we proceed?' }
+            ]},
+            market: { title: '市场情报', icon: '📊', tag: 'Intelligence', content: [
+                { title: 'SEO 核心池', items: [{ k: 'Top 1', v: 'Patio Umbrella Wholesale' }, { k: 'Top 2', v: 'Luxury Garden Furniture' }] },
+                { title: '竞品动态', items: [{ k: '对手 A', v: '正在主推智能遮阳系统' }, { k: '应对策略', v: '强化手工缝纫质感差异化' }] }
+            ]}
+        };
+        const nav = document.getElementById('nav-container');
+        const content = document.getElementById('dynamic-content');
+        const modal = document.getElementById('modal-overlay');
+        function init() { Object.keys(KNOWLEDGE).forEach(key => { const item = document.createElement('div'); item.className = 'nav-btn'; item.innerHTML = `<span style="font-size:1.2rem">\${KNOWLEDGE[key].icon}</span> <span>\${KNOWLEDGE[key].title}</span>`; item.onclick = () => render(key); nav.appendChild(item); }); }
+        function render(key) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); const current = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.innerText.includes(KNOWLEDGE[key].title)); current && current.classList.add('active'); const data = KNOWLEDGE[key]; let html = `<div class="intro-warmth"><span>MODULE: \${data.tag}</span><h1>\${data.title}</h1></div><div class="data-grid">`; if (data.content) { data.content.forEach(c => { html += `<div class="content-card"><span class="card-tag">\${data.tag}</span><h3 class="card-title">\${c.title}</h3>`; c.items.forEach(i => html += `<div class="info-row"><span class="info-label">\${i.k}</span><span class="info-value">\${i.v}</span></div>`); html += \`</div>\`; }); } else if (data.scripts) { data.scripts.forEach(s => { html += `<div class="content-card" onclick="openModal('\${s.name}', \\\`\${s.text.replace(/\\n/g, '\\\\n')}\\\`)"> <span class="card-tag">Ready to Copy</span><h3 class="card-title">\${s.name}</h3> <div class="script-preview">\${s.text.substring(0, 100)}...</div> </div>`; }); } html += \`</div>\`; content.innerHTML = html; }
+        window.openModal = function(title, text) { document.getElementById('modal-title-text').innerText = title; document.getElementById('modal-code').innerText = text; modal.style.display = 'block'; document.getElementById('copy-action').onclick = () => { navigator.clipboard.writeText(text).then(() => { const btn = document.getElementById('copy-action'); btn.innerText = '✅ 已存入剪贴板'; setTimeout(() => btn.innerText = '复制话术并跟进', 2000); }); }; };
+        document.querySelector('.close-x').onclick = () => modal.style.display = 'none';
+        window.onclick = (e) => { if(e.target == modal) modal.style.display = 'none'; };
+        init(); render('sop');
+    </script>
+</body>
+</html>
