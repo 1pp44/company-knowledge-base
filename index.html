@@ -44,13 +44,13 @@
         .viewport-container { height: 100vh; width: 100%; position: relative; }
         .view-pane {
             position: absolute; inset: 0; opacity: 0; visibility: hidden;
-            transform: translateY(30px) scale(0.99);
+            transform: translateY(20px) scale(0.99);
             transition: var(--transition-main);
             overflow-y: auto; padding: 120px 60px 80px;
         }
         .view-pane.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
-        /* --- HOME 视图: 极致品牌故事 & 交互 --- */
+        /* --- HOME 视图 --- */
         .home-view { padding: 0; overflow-y: auto; overflow-x: hidden; }
         .hero-section { height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; }
         .hero-bg {
@@ -65,7 +65,7 @@
         }
         .hero-title-giant .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.4); }
 
-        /* 品牌故事：大数据理念区 */
+        /* 品牌故事 */
         .brand-philosophy { padding: 150px 10%; background: #0a0a0a; position: relative; }
         .philosophy-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
         .philo-text h3 { font-family: 'Playfair Display'; font-size: 4rem; font-weight: 400; line-height: 1.1; margin-bottom: 40px; }
@@ -83,31 +83,28 @@
         .concept-card .data-point { font-size: 0.75rem; color: var(--text-muted); opacity: 0; transition: 0.4s; }
         .concept-card:hover .data-point { opacity: 1; }
 
-        /* 空间艺术展示区 */
-        .art-of-shade { 
-            height: 80vh; margin: 100px 0; background: url('https://images.unsplash.com/photo-1600607687960-4a2123d7415b?q=80&w=2000') center/cover no-repeat fixed;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .art-text { background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); padding: 60px 100px; border-radius: var(--radius); text-align: center; }
-
-        /* --- 产品矩阵视图 --- */
+        /* --- 产品视图 --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; margin-top: 50px; }
         .product-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-soft); border-radius: 4px; overflow: hidden; transition: var(--transition-main); cursor: pointer; }
         .product-card:hover { transform: translateY(-10px); border-color: var(--accent-orange); }
         .product-card img { width: 100%; height: 350px; object-fit: cover; }
         .product-info { padding: 25px; }
 
-        /* --- 情报视图 --- */
-        .intel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
-        .intel-card { background: var(--glass); padding: 50px; border: 1px solid var(--border-soft); border-radius: var(--radius); }
+        /* --- 备注编辑样式 --- */
+        .note-editor-container { margin-top: 50px; padding: 40px; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid var(--border-soft); }
+        .note-label { font-size: 0.7rem; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
+        .note-textarea { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; padding: 20px; font-family: inherit; font-size: 0.9rem; line-height: 1.8; min-height: 120px; resize: vertical; outline: none; transition: 0.3s; }
+        .note-textarea:focus { border-color: var(--accent-orange); background: rgba(255,255,255,0.01); }
+        .save-note-btn { margin-top: 15px; background: var(--accent-orange); color: #000; border: none; padding: 10px 25px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .save-note-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
 
         /* --- 弹窗 --- */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; padding: 60px; }
-        .close-modal { position: fixed; right: 50px; top: 50px; font-size: 2rem; cursor: pointer; }
+        .close-modal { position: fixed; right: 50px; top: 50px; font-size: 2rem; cursor: pointer; z-index: 2001; }
 
         @media (max-width: 1024px) {
-            .philosophy-grid, .interactive-cards, .intel-grid { grid-template-columns: 1fr; }
             .hero-title-giant { font-size: 25vw; }
+            .product-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -126,7 +123,7 @@
     </header>
 
     <div class="viewport-container">
-        <!-- 【HOME 封面与大数据品牌故事】 -->
+        <!-- 【HOME 封面】 -->
         <section id="home" class="view-pane home-view active">
             <div class="hero-section">
                 <div class="hero-bg"></div>
@@ -139,91 +136,42 @@
                     <p>良益休闲：定义阳光下的居住艺术。基于大数据深度洞察，为您呈现极致的户外生活方案。</p>
                 </div>
             </div>
-
-            <!-- 深度交互品牌故事 -->
             <div class="brand-philosophy">
                 <div class="philosophy-grid">
                     <div class="philo-text">
                         <h3>雕刻阳光的艺术<br>Sculpting the Light</h3>
-                        <p>庭院伞不仅是功能性的遮挡，更是建筑空间的视觉终点。在大数据研究中，92% 的高端买家认为，一把好的遮阳伞应具有“空间延伸感”。</p>
                         <p>良益致力于将传统伞具转化为“户外动态雕塑”。通过力学与美学的精确平衡，让每一寸阴影都成为生活的艺术品。</p>
                     </div>
                     <div class="philo-img">
                         <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" style="width:100%; border-radius:var(--radius); filter:grayscale(0.2);">
                     </div>
                 </div>
-
-                <div class="interactive-cards">
-                    <div class="concept-card">
-                        <i class="fas fa-drafting-compass"></i>
-                        <h4>建筑化构图</h4>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Umbrella as Architecture</p>
-                        <div class="data-point">数据：采用 0.8mm 航空级铝材，抗风性能提升 45%。</div>
-                    </div>
-                    <div class="concept-card">
-                        <i class="fas fa-sun"></i>
-                        <h4>光影力学</h4>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Optical Mechanics</p>
-                        <div class="data-point">指标：欧标 4 级色牢度，原液色织技术，2000h+ 暴晒不褪色。</div>
-                    </div>
-                    <div class="concept-card">
-                        <i class="fas fa-leaf"></i>
-                        <h4>可持续美学</h4>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Sustainable Vibe</p>
-                        <div class="data-point">认证：100% 可回收面料，符合 GRS 全球回收标准。</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="art-of-shade">
-                <div class="art-text">
-                    <h2 style="font-family:'Playfair Display'; font-size:3.5rem; font-weight:100;">VALUE THAT INSPIRES.</h2>
-                    <p style="color:var(--text-muted); margin-top:20px; font-weight:200;">良益实业 · 专注外贸 15 年</p>
-                </div>
             </div>
         </section>
 
-        <!-- 【身份视图】 -->
         <section id="identity" class="view-pane">
-            <div style="padding:100px; text-align:center;">
-                <h2 style="font-size:4rem; font-family:'Playfair Display';">TRUST ASSETS</h2>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:50px; text-align:left;">
-                    <div class="concept-card"><h4>资质背书</h4><p>ISO9001 / CE / RoHS 全激活。通过 500 强企业 SGS 深度审计。</p></div>
-                    <div class="concept-card"><h4>工厂实力</h4><p>20,000㎡ 生产基地，日产 2000 套。24h 极速样机响应。</p></div>
-                </div>
-            </div>
+            <div style="padding:100px; text-align:center;"><h2>资质资产已就绪</h2></div>
         </section>
 
         <!-- 【产品视图】 -->
         <section id="products" class="view-pane">
             <div style="text-align:center; margin-bottom:60px;">
                 <h2 style="font-size:4rem; font-family:'Playfair Display'; font-weight:100; letter-spacing:10px;">PRODUCT MATRIX</h2>
-                <p style="color:var(--accent-orange); letter-spacing:5px;">14 EXQUISITE STYLES</p>
+                <p style="color:var(--accent-orange); letter-spacing:5px;">14 EXQUISITE STYLES WITH EDITABLE NOTES</p>
             </div>
             <div class="product-grid" id="umbrella-list"></div>
         </section>
 
-        <!-- 其他补全视图 (保持大数据逻辑) -->
         <section id="market" class="view-pane">
-            <div class="intel-grid">
-                <div class="intel-card"><h3>2026 行业趋势</h3><p>大数据预测：轻量化玻纤骨架与太阳能集成将占据 60% 市场份额。</p></div>
-                <div class="intel-card"><h3>竞品对标</h3><p>良益 0.8mm 壁厚标准 vs 行业通用 0.5mm，耐用度提升 3 倍。</p></div>
-                <div class="intel-card"><h3>核心买家画像</h3><p>精准锁定酒店采购商、连锁商超、高客单价 DTC 品牌。</p></div>
-            </div>
+            <div style="padding:100px; text-align:center;"><h2>情报中心已就绪</h2></div>
         </section>
 
         <section id="sop" class="view-pane">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px;">
-                <div class="concept-card" onclick="copy('...')"><h4>询盘首回话术</h4><p>大数据高转化率话术：强调 1h 响应、15年经验与精修画册包。</p></div>
-                <div class="concept-card" onclick="copy('...')"><h4>异议处理话术</h4><p>针对价格、货期、质量保修的标准化回复模块。</p></div>
-            </div>
+            <div style="padding:100px; text-align:center;"><h2>话术终端已就绪</h2></div>
         </section>
 
         <section id="brand" class="view-pane">
-            <div class="brand-layout">
-                <div class="concept-card"><h4>视觉规范 (VI)</h4><p>标准色：#080808 (Deep) / #FF5C00 (Warm). 字体：Playfair / Inter.</p></div>
-                <div class="concept-card"><h4>媒体资源包</h4><p>4K 渲染图、15s 精修视频、A+ 详情页模板已就绪。</p></div>
-            </div>
+            <div style="padding:100px; text-align:center;"><h2>品牌中心已就绪</h2></div>
         </section>
     </div>
 
@@ -274,16 +222,34 @@
             const u = UMBRELLAS.find(x => x.id === id);
             const modal = document.getElementById('product-modal');
             const content = document.getElementById('modal-content');
+            
+            // 从 localStorage 读取备注
+            const savedNote = localStorage.getItem(`product_note_${u.id}`) || "在此处输入产品备注（如：特价批次、生产周期提醒、客户定制要求等）...";
+
             content.innerHTML = `
                 <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:50px; letter-spacing:5px;">${u.name} - 视觉数字化</h2>
-                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => `<img src="${img}" style="width:100%; border-radius:4px;">`).join('')}</div>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => \`<img src="\${img}" style="width:100%; border-radius:4px;">\`).join('')}</div>
+                
+                <!-- 备注编辑区 -->
+                <div class="note-editor-container">
+                    <span class="note-label">Internal Product Notes / 产品内部备注</span>
+                    <textarea class="note-textarea" id="note-input-\${u.id}">\${savedNote}</textarea>
+                    <button class="save-note-btn" onclick="saveNote(\${u.id})">保存备注 (Save Note)</button>
+                </div>
             `;
             modal.style.display = 'block';
         }
 
-        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
-        function copy(text) { navigator.clipboard.writeText(text).then(() => alert('话术已成功复制！')); }
+        function saveNote(id) {
+            const noteContent = document.getElementById(\`note-input-\${id}\`).value;
+            localStorage.setItem(\`product_note_\${id}\`, noteContent);
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "✅ 已保存至本地 (Saved)";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        }
 
+        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
         init();
     </script>
 </body>
