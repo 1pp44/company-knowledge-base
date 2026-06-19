@@ -228,7 +228,7 @@
 
             content.innerHTML = `
                 <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:50px; letter-spacing:5px;">${u.name} - 视觉数字化</h2>
-                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => \`<img src="\${img}" style="width:100%; border-radius:4px;">\`).join('')}</div>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => `<img src="${img}" style="width:100%; border-radius:4px;">`).join('')}</div>
                 
                 <!-- 备注编辑区 -->
                 <div class="note-editor-container">
