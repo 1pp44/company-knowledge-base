@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global-Biz-Brain | Horizon Grove Replica</title>
+    <title>LIANGYI | 良益休闲品牌知识库</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 引入高级感字体：复刻原图的衬线与无衬线混搭 */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
         :root {
-            --bg-color: #0d0d0d;
-            --accent-orange: #ff5c00;
+            --bg-color: #0a0a0a;
+            --accent-color: #ff5c00;
+            --brand-green: #2d5a27;
             --text-muted: rgba(255, 255, 255, 0.4);
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -19,137 +19,146 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* --- Header: Perfect Replica --- */
+        /* --- Header --- */
         header {
             position: fixed; width: 100%; top: 0; z-index: 1000;
             padding: 30px 50px; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
-        .menu-icon { font-size: 1.2rem; cursor: pointer; }
-        .logo-text { font-size: 1.2rem; letter-spacing: 6px; font-weight: 200; text-transform: uppercase; }
-        .heart-icon { font-size: 1.1rem; opacity: 0.8; }
+        .logo-text { font-size: 1.2rem; letter-spacing: 8px; font-weight: 200; text-transform: uppercase; color: #fff; }
+        .logo-text span { font-weight: 600; color: var(--accent-color); }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; transition: 0.3s; }
+        nav ul li a:hover { opacity: 1; color: var(--accent-color); }
 
-        /* --- Hero Section: The Horizon Grove Core --- */
+        /* --- Hero Section: The Liangyi Masterpiece --- */
         .hero {
-            height: 100vh; position: relative; padding: 120px 50px;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            height: 110vh; position: relative; padding: 120px 50px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat;
             display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        /* 超大背景文字复刻 */
         .hero-bg-text {
             position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
-            font-size: 16vw; line-height: 0.8; font-weight: 200; letter-spacing: -5px;
-            text-transform: uppercase; white-space: nowrap; opacity: 0.9;
-            pointer-events: none; z-index: 1;
+            font-size: 18vw; line-height: 0.8; font-weight: 200; letter-spacing: -8px;
+            text-transform: uppercase; white-space: nowrap; opacity: 0.8;
+            pointer-events: none; z-index: 1; font-family: 'Playfair Display', serif;
         }
-        .hero-bg-text span { display: block; }
-        .hero-bg-text .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
+        .hero-bg-text .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.4); }
+        .hero-bg-text .dot { color: var(--accent-color); }
 
-        /* 左侧内容块 */
-        .hero-content { position: relative; z-index: 10; max-width: 400px; margin-top: 100px; }
-        .hero-content h2 { font-size: 2.5rem; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
-        .hero-content p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 30px; }
-        .hero-btn { 
-            display: inline-block; padding: 12px 35px; border-radius: 30px; background: #fff; color: #000;
-            text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+        .hero-content { position: relative; z-index: 10; max-width: 450px; margin-top: 120px; }
+        .hero-content h2 { font-size: 3rem; font-weight: 100; line-height: 1; margin-bottom: 25px; text-transform: lowercase; }
+        .hero-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 2; margin-bottom: 40px; font-weight: 300; }
+        .cta-btn { 
+            display: inline-block; padding: 15px 45px; border-radius: 40px; background: #fff; color: #000;
+            text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; transition: 0.3s;
         }
+        .cta-btn:hover { transform: translateY(-5px); background: var(--accent-color); color: #fff; }
 
-        /* 底部状态栏 */
         .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 10; }
-        .hero-info { font-size: 0.7rem; color: var(--text-muted); }
-        .hero-info div { margin-top: 5px; color: #fff; font-size: 0.9rem; font-weight: 300; }
+        .hero-stat { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+        .hero-stat div { margin-top: 5px; color: #fff; font-size: 1.1rem; font-weight: 200; }
 
-        .progress-block { width: 300px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
-        .progress-bar { width: 100%; height: 1px; background: rgba(255,255,255,0.2); position: relative; }
-        .progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: #fff; width: 85%; }
-        .progress-fill::after { content: ""; position: absolute; right: 0; top: -2px; width: 5px; height: 5px; background: #fff; border-radius: 50%; }
+        .progress-box { width: 320px; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 2px; }
+        .bar-bg { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; }
+        .bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: #fff; width: 92%; }
+        .bar-fill::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; background: #fff; border-radius: 50%; }
 
-        /* --- Section 2: SPACE THAT INSPIRES --- */
-        .quote-section { padding: 150px 50px; text-align: center; }
-        .bracket-quote { display: inline-flex; align-items: center; gap: 40px; }
-        .bracket { font-size: 5rem; font-weight: 100; color: rgba(255,255,255,0.1); }
-        .quote-text { font-size: 4.5rem; letter-spacing: 8px; font-weight: 100; text-transform: uppercase; line-height: 1; }
-        .quote-text span { display: block; }
-        .dot { color: var(--accent-orange); }
+        /* --- Quote Section --- */
+        .quote-wrap { padding: 180px 50px; text-align: center; }
+        .bracket { font-size: 6rem; font-weight: 100; color: rgba(255,255,255,0.05); font-family: 'Playfair Display'; }
+        .quote-inner { display: inline-flex; align-items: center; gap: 50px; }
+        .quote-main { font-size: 5rem; letter-spacing: 12px; font-weight: 100; text-transform: uppercase; line-height: 1.1; font-family: 'Playfair Display'; }
+        .quote-main span { display: block; }
 
-        /* --- Section 3: Horizontal Grid --- */
-        .feature-grid { padding: 50px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        .feature-card { position: relative; height: 250px; overflow: hidden; border-radius: 12px; }
-        .feature-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
-        .feature-card:hover img { transform: scale(1.1); }
-        .feature-card .tag { position: absolute; bottom: 20px; left: 20px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* --- Section 4: Hillside Complex (Overlapping) --- */
-        .complex-section { padding: 100px 50px; position: relative; display: flex; align-items: center; }
-        .complex-img-wrap { width: 60%; position: relative; }
-        .complex-img-main { width: 100%; border-radius: 4px; }
-        .complex-img-sub { position: absolute; width: 40%; right: -10%; bottom: -10%; border: 15px solid var(--bg-color); border-radius: 4px; }
+        /* --- Identity: Factory & Building --- */
+        .identity-section { padding: 100px 50px; display: flex; align-items: center; gap: 80px; }
+        .img-stack { width: 55%; position: relative; }
+        .img-main { width: 100%; border-radius: 2px; filter: grayscale(0.2); }
+        .img-sub { position: absolute; width: 45%; right: -8%; bottom: -15%; border: 15px solid var(--bg-color); border-radius: 2px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
         
-        .complex-text { 
-            width: 40%; padding-left: 80px; position: relative; z-index: 10;
+        .text-stack { width: 45%; padding-right: 50px; }
+        .text-stack h4 { font-size: 0.65rem; letter-spacing: 4px; color: var(--accent-color); margin-bottom: 25px; text-transform: uppercase; }
+        .text-stack h2 { font-size: 3.5rem; font-family: 'Playfair Display'; font-weight: 400; line-height: 1.1; margin-bottom: 35px; }
+        .text-stack p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.9; font-weight: 300; margin-bottom: 40px; }
+
+        /* --- Product Matrix: The 3M Umbrella --- */
+        .product-section { padding: 120px 50px; background: #111; }
+        .param-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; }
+        .param-card { 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;
         }
-        .complex-text p { font-size: 1.1rem; font-weight: 300; line-height: 1.6; margin-bottom: 40px; }
-        .vertical-title { 
-            position: absolute; right: -50px; top: 0; font-size: 10vw; 
-            text-transform: uppercase; font-weight: 800; opacity: 0.05;
-            writing-mode: vertical-rl; pointer-events: none;
+        .param-label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 10px; display: block; }
+        .param-value { font-size: 1.2rem; font-weight: 200; color: #fff; }
+
+        /* --- SOP & Guidelines --- */
+        .sop-section { padding: 100px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: flex-start; }
+        .sop-card { background: rgba(255,255,255,0.02); padding: 50px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; }
+        .sop-card:hover { background: rgba(255,255,255,0.04); border-color: var(--accent-color); }
+        .sop-card h3 { font-size: 1.5rem; font-weight: 300; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .sop-item { margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+        .sop-item strong { color: #fff; display: block; margin-bottom: 5px; font-weight: 400; }
+
+        footer { 
+            padding: 80px 50px; border-top: 1px solid rgba(255,255,255,0.05); 
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.6rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase;
         }
 
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .hero-bg-text { font-size: 25vw; top: 25%; }
-            .hero-content { margin-top: 150px; }
-            .quote-text { font-size: 2.5rem; }
-            .complex-section { flex-direction: column; }
-            .complex-img-wrap, .complex-text { width: 100%; padding: 0; margin-top: 50px; }
-            .feature-grid { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 1024px) {
+            .hero-bg-text { font-size: 25vw; }
+            .identity-section, .sop-section { flex-direction: column; gap: 60px; }
+            .img-stack, .text-stack, .sop-card { width: 100%; padding: 0; }
+            .param-grid { grid-template-columns: 1fr 1fr; }
+            .quote-main { font-size: 3rem; }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="menu-icon"><i class="fas fa-bars"></i></div>
-        <div class="logo-text">Fabriliant</div>
-        <div class="heart-icon"><i class="far fa-heart"></i></div>
+        <div class="logo-text">LIANGYI <span>.</span></div>
+        <nav>
+            <ul>
+                <li><a href="#identity">实力背书</a></li>
+                <li><a href="#products">核心品库</a></li>
+                <li><a href="#sop">服务准则</a></li>
+            </ul>
+        </nav>
     </header>
 
     <section class="hero">
-        <!-- 复刻：巨大的叠层标题 -->
         <div class="hero-bg-text">
-            <span class="outline">Horizon</span>
-            <span>Grove<span class="dot">.</span></span>
+            <span class="outline">Liangyi</span>
+            <span>Leisure<span class="dot">.</span></span>
         </div>
 
         <div class="hero-content">
-            <h2>welcome to<br>horizon grove</h2>
-            <p>A unique space where modern design meets unparalleled convenience, offering a lifestyle beyond expectations. </p>
-            <a href="#" class="hero-btn">View Apartments &rsaquo;</a>
+            <h2>outdoor umbrella<br>redefined.</h2>
+            <p>浙江良益休闲用品有限公司，15年专注户外遮阳美学。我们不仅制造伞具，更在雕塑阳光下的生活方式。</p>
+            <a href="#products" class="cta-btn">探索全量品库 &rsaquo;</a>
         </div>
 
         <div class="hero-bottom">
-            <div class="hero-info">
-                <span>From $6570/M2</span>
-                <div>San Cassiano, Northern Italy</div>
+            <div class="hero-stat">
+                <span>Core Location</span>
+                <div>Zhejiang, China</div>
             </div>
-            <div class="progress-block">
-                <div class="progress-label">
-                    <span>Construction Progress</span>
-                    <span>85%</span>
+            <div class="progress-box">
+                <div class="progress-header">
+                    <span>Manufacturing Quality</span>
+                    <span>92% PRO</span>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
+                <div class="bar-bg"><div class="bar-fill"></div></div>
             </div>
         </div>
     </section>
 
-    <section class="quote-section">
-        <div class="bracket-quote">
+    <section class="quote-wrap">
+        <div class="quote-inner">
             <span class="bracket">[</span>
-            <h2 class="quote-text">
+            <h2 class="quote-main">
                 <span>Space</span>
                 <span>That Inspires<span class="dot">.</span></span>
             </h2>
@@ -157,28 +166,66 @@
         </div>
     </section>
 
-    <section class="feature-grid">
-        <div class="feature-card"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=600&auto=format&fit=crop"><span class="tag">Design Suite</span></div>
-        <div class="feature-card"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600&auto=format&fit=crop"><span class="tag">Panoramic View</span></div>
-        <div class="feature-card"><img src="https://images.unsplash.com/photo-1600607687960-4a2123d7415b?q=80&w=600&auto=format&fit=crop"><span class="tag">Smart Living</span></div>
-        <div class="feature-card"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=600&auto=format&fit=crop"><span class="tag">Luxury Lounge</span></div>
-    </section>
-
-    <section class="complex-section">
-        <div class="complex-img-wrap">
-            <img src="https://images.unsplash.com/photo-1448630360428-65456885c650?q=80&w=1000&auto=format&fit=crop" class="complex-img-main">
-            <img src="https://images.unsplash.com/photo-1464146072230-91cabc968266?q=80&w=600&auto=format&fit=crop" class="complex-img-sub">
+    <section id="identity" class="identity-section">
+        <div class="img-stack">
+            <!-- 公司大楼实拍 -->
+            <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" class="img-main" alt="Liangyi Building">
+            <!-- 生产车间实拍交叠 -->
+            <img src="https://sc02.alicdn.com/kf/H1b779f27286e4fb58bae053611c52237O.png" class="img-sub" alt="Liangyi Workshop">
         </div>
-        <div class="complex-text">
-            <p>It's a private hillside complex designed for quiet living and timeless views, creating a space <span style="color:var(--accent-orange)">you'll love</span> to call home.</p>
-            <div style="font-size:0.7rem; letter-spacing:4px; text-transform:uppercase; color:var(--text-muted)">ABOUT US</div>
-            <h2 style="font-size:3rem; font-weight:200; margin-top:20px; letter-spacing:5px;">HORIZON<br>GROVE</h2>
-            <div class="vertical-title">HORIZON GROVE</div>
+        <div class="text-stack">
+            <h4>Trust & Identity</h4>
+            <h2>15年实业沉淀<br>智造户外精品</h2>
+            <p>良益休闲坐落于中国户外产业高地，拥有从原材料、精密注塑到成品组装的完整生产闭环。每一把良益伞都经过8道质检程序，确保在强风与烈日下依然优雅稳固。</p>
+            <div style="display:flex; gap:50px;">
+                <div><span class="hero-stat">资质</span><div style="font-size:0.9rem; font-weight:300; margin-top:5px;">ISO / CE / 专利认定</div></div>
+                <div><span class="hero-stat">核心优势</span><div style="font-size:0.9rem; font-weight:300; margin-top:5px;">24h出样 / 全球直供</div></div>
+            </div>
         </div>
     </section>
 
-    <footer style="padding: 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-size: 0.6rem; letter-spacing: 3px;">
-        ? 2026 HORIZON GROVE | PERFECT REPLICA BY BIZ-BRAIN
+    <section id="products" class="product-section">
+        <div style="text-align:center; margin-bottom:80px;">
+            <h4 class="hero-stat" style="color:var(--accent-color)">Product Intelligence</h4>
+            <h2 style="font-size:3rem; font-family:'Playfair Display'; font-weight:200; margin-top:10px;">3-Meter Classic Round</h2>
+        </div>
+        
+        <div style="width:100%; height:60vh; background:url('https://sc02.alicdn.com/kf/H38d4829c8b4e43f9b9604f96a89d7250l.jpg') center/cover no-repeat; border-radius:2px;"></div>
+
+        <div class="param-grid">
+            <div class="param-card"><span class="param-label">型号名称</span><div class="param-value">3米户外遮阳圆伞</div></div>
+            <div class="param-card"><span class="param-label">骨架规格</span><div class="param-value">8根全铁加固伞骨</div></div>
+            <div class="param-card"><span class="param-label">核心设计</span><div class="param-value">带摇手/带插销/带转向</div></div>
+            <div class="param-card"><span class="param-label">面料材质</span><div class="param-value">高密度色织布 (防褪色)</div></div>
+            <div class="param-card"><span class="param-label">单品毛重</span><div class="param-value">8.0 KGS</div></div>
+            <div class="param-card"><span class="param-label">包装方式</span><div class="param-value">五层加强瓦楞纸箱</div></div>
+            <div class="param-card"><span class="param-label">SKU 色系</span><div class="param-value">咖/天蓝/墨绿/米白/大红</div></div>
+            <div class="param-card"><span class="param-label">注意事项</span><div class="param-value">单品不含底座</div></div>
+        </div>
+    </section>
+
+    <section id="sop" class="sop-section">
+        <div class="sop-card">
+            <h3>购物须知 (Shopping Guidelines)</h3>
+            <div class="sop-item"><strong>关于发货</strong>由于订单量较大，具体货期请咨询客户经理。现货通常在48小时内发出。</div>
+            <div class="sop-item"><strong>签收提醒</strong>请务必本人签收并检查外包装完整。如有明显挤压变形请当场拒签。</div>
+            <div class="sop-item"><strong>关于色差</strong>因拍摄环境及显示器差异，实物颜色可能存在细微偏差。</div>
+            <div class="sop-item"><strong>退换策略</strong>非质量问题产生的退换，需客户承担往返运费。</div>
+        </div>
+        <div class="sop-card" style="border-color:rgba(255,255,255,0.1)">
+            <h3>温馨提示 (Warm Prompt)</h3>
+            <div class="sop-item"><strong>安全第一</strong>为保障人身安全及延长伞具寿命，遇大风、暴雨、冰雹或地震时，请务必及时收拢伞具。</div>
+            <div class="sop-item"><strong>长期离守</strong>当您长时间离开伞具身边时，请习惯性将其收起。</div>
+            <div class="sop-item" style="margin-top:40px;">
+                <span class="hero-stat">Service Standard</span>
+                <div style="font-size:1.1rem; color:var(--accent-color); margin-top:10px;">1小时响应 / 4小时方案</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>© 2026 ZHEJIANG LIANGYI LEISURE PRODUCTS CO., LTD.</div>
+        <div>DESIGNED FOR FABRILIANT BRAIN SYSTEM</div>
     </footer>
 </body>
 </html>
