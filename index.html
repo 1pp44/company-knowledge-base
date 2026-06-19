@@ -233,16 +233,16 @@
                 <!-- 备注编辑区 -->
                 <div class="note-editor-container">
                     <span class="note-label">Internal Product Notes / 产品内部备注</span>
-                    <textarea class="note-textarea" id="note-input-\${u.id}">\${savedNote}</textarea>
-                    <button class="save-note-btn" onclick="saveNote(\${u.id})">保存备注 (Save Note)</button>
+                    <textarea class="note-textarea" id="note-input-${u.id}">${savedNote}</textarea>
+                    <button class="save-note-btn" onclick="saveNote(${u.id})">保存备注 (Save Note)</button>
                 </div>
             `;
             modal.style.display = 'block';
         }
 
         function saveNote(id) {
-            const noteContent = document.getElementById(\`note-input-\${id}\`).value;
-            localStorage.setItem(\`product_note_\${id}\`, noteContent);
+            const noteContent = document.getElementById(`note-input-${id}`).value;
+            localStorage.setItem(`product_note_${id}`, noteContent);
             const btn = event.target;
             const originalText = btn.innerText;
             btn.innerText = "✅ 已保存至本地 (Saved)";
