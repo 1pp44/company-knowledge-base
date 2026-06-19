@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIANGYI BIZ-BRAIN | 良益全量业务知识库</title>
+    <title>LIANGYI | 良益全球业务大脑 - 终极版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
@@ -19,293 +19,241 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
 
-        /* --- 顶栏：复刻原图导航 --- */
+        /* --- 导航栏：复刻原图样式 --- */
         header {
             position: fixed; width: 100%; top: 0; z-index: 1000;
-            padding: 40px 60px; display: flex; justify-content: center;
+            padding: 40px 60px; display: flex; justify-content: space-between; align-items: center;
             background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
-        nav ul { display: flex; list-style: none; gap: 40px; }
+        .logo-home { font-size: 1.1rem; letter-spacing: 5px; font-weight: 200; text-transform: uppercase; cursor: pointer; }
+        .logo-home span { color: var(--accent-orange); font-weight: 600; }
+        
+        nav ul { display: flex; list-style: none; gap: 30px; }
         nav ul li { 
-            font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; 
+            font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; 
             opacity: 0.4; cursor: pointer; transition: 0.3s;
             position: relative;
         }
         nav ul li.active { opacity: 1; color: #fff; }
         nav ul li.active::after {
-            content: ""; position: absolute; bottom: -10px; left: 0; width: 100%; height: 1px; background: var(--accent-orange);
+            content: ""; position: absolute; bottom: -8px; left: 0; width: 100%; height: 1px; background: var(--accent-orange);
         }
         nav ul li:hover { opacity: 1; }
 
-        /* --- 独立端口容器 --- */
-        .port-container {
-            height: 100vh; width: 100%; position: relative;
-        }
-        .port-view {
+        /* --- 视图切换系统 --- */
+        .viewport-container { height: 100vh; width: 100%; position: relative; }
+        .view-pane {
             position: absolute; inset: 0; opacity: 0; visibility: hidden;
-            transform: translateY(30px) scale(0.98);
+            transform: translateY(20px) scale(0.99);
             transition: var(--transition-main);
             overflow-y: auto; padding: 120px 60px 80px;
         }
-        .port-view.active {
-            opacity: 1; visibility: visible;
-            transform: translateY(0) scale(1);
-        }
+        .view-pane.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
-        /* --- 视觉装饰：背景大字报 --- */
-        .bg-title {
-            position: fixed; top: 15%; left: 50%; transform: translateX(-50%);
+        /* --- 视图 0: HOME (原本的主界面 - 像素级复刻) --- */
+        .home-view { padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat;
+            z-index: -1;
+        }
+        .hero-title-giant {
+            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
             font-size: 18vw; font-family: 'Playfair Display'; text-transform: uppercase;
-            letter-spacing: -5px; opacity: 0.03; pointer-events: none; z-index: 0; white-space: nowrap;
+            letter-spacing: -8px; line-height: 0.8; opacity: 0.8; pointer-events: none;
         }
+        .hero-title-giant .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.4); }
+        .hero-main-content { padding: 0 10%; position: relative; z-index: 10; max-width: 600px; }
+        .hero-main-content h2 { font-size: 3rem; font-weight: 100; line-height: 1.1; margin-bottom: 25px; }
+        .hero-main-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 2; margin-bottom: 40px; }
+        
+        /* 复刻底部署名与进度条 */
+        .home-footer {
+            position: absolute; bottom: 80px; left: 10%; right: 10%;
+            display: flex; justify-content: space-between; align-items: flex-end; z-index: 10;
+        }
+        .home-info { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+        .home-info div { margin-top: 5px; color: #fff; font-size: 1rem; font-weight: 200; }
+        .progress-block { width: 300px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.6rem; text-transform: uppercase; margin-bottom: 10px; }
+        .bar-bg { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; }
+        .bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: #fff; width: 85%; }
+        .bar-fill::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; background: #fff; border-radius: 50%; }
 
-        /* --- 端口 1: 身份/资质 (Trust & Identity) --- */
-        .identity-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; align-items: center; min-height: 80vh; }
+        /* --- 视图 1: 身份/资质 --- */
+        .identity-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; min-height: 80vh; }
         .img-stack { position: relative; }
         .img-stack .main { width: 100%; border-radius: 2px; }
-        .img-stack .sub { position: absolute; width: 45%; right: -8%; bottom: -15%; border: 15px solid var(--bg-color); box-shadow: 0 50px 100px rgba(0,0,0,0.8); }
-        .id-content h4 { color: var(--accent-orange); letter-spacing: 5px; font-size: 0.7rem; margin-bottom: 30px; text-transform: uppercase; }
-        .id-content h2 { font-size: 4.5rem; font-family: 'Playfair Display'; line-height: 1; margin-bottom: 40px; }
-        .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .id-item { border-top: 1px solid var(--border-soft); padding-top: 20px; }
-        .id-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .id-val { font-size: 1rem; font-weight: 200; line-height: 1.6; }
+        .img-stack .sub { position: absolute; width: 45%; right: -8%; bottom: -15%; border: 15px solid var(--bg-color); box-shadow: 0 40px 80px rgba(0,0,0,0.7); }
+        .id-text h2 { font-size: 4rem; font-family: 'Playfair Display'; margin: 20px 0 40px; }
+        .id-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .id-card { border-top: 1px solid var(--border-soft); padding-top: 20px; }
+        .label-sm { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
 
-        /* --- 端口 2: 产品/Q&A (Inventory) --- */
-        .product-layout { max-width: 1400px; margin: 0 auto; }
-        .product-header { text-align: center; margin-bottom: 80px; }
-        .product-header h2 { font-size: 5rem; font-family: 'Playfair Display'; font-weight: 200; letter-spacing: 10px; }
-        .spec-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-soft); border: 1px solid var(--border-soft); margin-bottom: 100px; }
-        .spec-cell { background: var(--bg-color); padding: 50px; }
-        .qa-box { background: rgba(255,255,255,0.02); padding: 60px; border-radius: 4px; }
-        .qa-item { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
-        .qa-q { font-size: 1.1rem; color: var(--accent-orange); margin-bottom: 15px; font-weight: 300; }
-        .qa-a { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+        /* --- 视图 2: 产品/Q&A --- */
+        .product-matrix { max-width: 1300px; margin: 0 auto; text-align: center; }
+        .spec-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-soft); border: 1px solid var(--border-soft); margin: 60px 0 100px; text-align: left; }
+        .spec-cell { background: var(--bg-color); padding: 40px; }
+        .qa-container { background: rgba(255,255,255,0.02); padding: 60px; border-radius: 4px; text-align: left; }
 
-        /* --- 端口 3: 情报/画像 (Market) --- */
-        .market-layout { text-align: center; }
-        .bracket-quote { display: inline-flex; align-items: center; gap: 60px; margin-bottom: 100px; }
-        .bracket { font-size: 10rem; font-weight: 100; color: rgba(255,255,255,0.05); }
-        .intel-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: left; }
-        .intel-card { background: rgba(255,255,255,0.03); padding: 50px; border: 1px solid var(--border-soft); position: relative; overflow: hidden; }
-        .intel-card::after { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-orange); opacity: 0.3; }
-        .keyword { display: inline-block; padding: 6px 15px; background: rgba(255,255,255,0.05); border-radius: 20px; font-size: 0.7rem; margin: 0 10px 10px 0; }
+        /* --- 视图 3: 情报/画像 --- */
+        .market-center { text-align: center; }
+        .bracket-quote { display: inline-flex; align-items: center; gap: 40px; margin-bottom: 80px; }
+        .bracket { font-size: 8rem; font-weight: 100; color: rgba(255,255,255,0.05); }
+        .intel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
+        .intel-card { background: rgba(255,255,255,0.03); padding: 40px; border: 1px solid var(--border-soft); }
 
-        /* --- 端口 4: 话术/SOP (Action) --- */
-        .sop-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-        .script-terminal { background: #111; padding: 60px; border: 1px solid var(--border-soft); position: relative; }
-        .copy-btn { position: absolute; right: 40px; top: 40px; color: var(--accent-orange); font-size: 0.6rem; letter-spacing: 2px; font-weight: 800; cursor: pointer; border: 1px solid var(--accent-orange); padding: 5px 12px; }
-        .script-title { font-size: 1.5rem; font-family: 'Playfair Display'; margin-bottom: 30px; }
-        .script-content { font-size: 1rem; line-height: 1.8; color: var(--text-muted); font-weight: 300; }
+        /* --- 视图 4: 话术/SOP --- */
+        .sop-terminal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        .script-terminal { background: #111; padding: 50px; border: 1px solid var(--border-soft); position: relative; }
+        .copy-tag { position: absolute; right: 30px; top: 30px; color: var(--accent-orange); font-size: 0.6rem; font-weight: 800; cursor: pointer; border: 1px solid var(--accent-orange); padding: 4px 10px; }
 
-        /* --- 端口 5: 品牌资产 (Assets) --- */
-        .brand-layout { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
-        .asset-card { border: 1px solid var(--border-soft); padding: 40px; transition: 0.3s; }
-        .asset-card:hover { border-color: var(--accent-orange); background: rgba(255,255,255,0.02); }
-        .asset-card h3 { font-size: 0.7rem; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; }
-        .color-circle { width: 30px; height: 30px; border-radius: 50%; display: inline-block; margin-right: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        /* --- 视图 5: 品牌资产 --- */
+        .brand-assets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .asset-box { border: 1px solid var(--border-soft); padding: 30px; }
 
-        /* --- 动画：进场效果 --- */
-        .fade-in { animation: fadeIn 1s forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 移动端适配 */
         @media (max-width: 1024px) {
             header { padding: 20px; }
-            nav ul { gap: 15px; }
-            nav ul li { font-size: 0.6rem; letter-spacing: 1px; }
-            .identity-layout, .sop-layout, .intel-wrap { grid-template-columns: 1fr; gap: 50px; }
-            .spec-table { grid-template-columns: 1fr 1fr; }
-            .bg-title { font-size: 30vw; }
-            .port-view { padding: 100px 30px; }
+            nav ul { gap: 10px; flex-wrap: wrap; justify-content: center; }
+            nav ul li { font-size: 0.6rem; }
+            .identity-grid, .sop-terminal-grid, .intel-grid { grid-template-columns: 1fr; }
+            .hero-title-giant { font-size: 25vw; top: 25%; }
+            .home-footer { flex-direction: column; align-items: flex-start; gap: 30px; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-title">LIANGYI</div>
-
     <header>
+        <div class="logo-home" onclick="switchView('home')">LIANGYI <span>.</span></div>
         <nav>
-            <ul id="main-nav">
-                <li onclick="switchPort('identity')" id="nav-identity" class="active">身份/资质</li>
-                <li onclick="switchPort('products')" id="nav-products">产品/Q&A</li>
-                <li onclick="switchPort('market')" id="nav-market">情报/画像</li>
-                <li onclick="switchPort('sop')" id="nav-sop">话术/SOP</li>
-                <li onclick="switchPort('brand')" id="nav-brand">品牌资产</li>
+            <ul id="nav-list">
+                <li onclick="switchView('identity')" id="nav-identity">身份/资质</li>
+                <li onclick="switchView('products')" id="nav-products">产品/Q&A</li>
+                <li onclick="switchView('market')" id="nav-market">情报/画像</li>
+                <li onclick="switchView('sop')" id="nav-sop">话术/SOP</li>
+                <li onclick="switchView('brand')" id="nav-brand">品牌资产</li>
             </ul>
         </nav>
     </header>
 
-    <div class="port-container">
-        <!-- 端口 1: 身份/资质 -->
-        <section id="identity" class="port-view active">
-            <div class="identity-layout">
+    <div class="viewport-container">
+        <!-- 【视图 0: 主界面 - HOME】 -->
+        <section id="home" class="view-pane home-view active">
+            <div class="hero-bg"></div>
+            <div class="hero-title-giant">
+                <span class="outline">Liangyi</span>
+                <span>Leisure<span style="color:var(--accent-orange)">.</span></span>
+            </div>
+            <div class="hero-main-content">
+                <h2>welcome to<br>liangyi brain</h2>
+                <p>浙江良益休闲用品有限公司全球业务知识库。这是我们的信用资产、全量品库、市场情报与 SOP 话术的“终极底稿”。</p>
+                <a href="javascript:switchView('identity')" class="logo-home" style="font-size:0.7rem; border:1px solid #fff; padding:15px 30px; border-radius:30px; text-decoration:none; color:#fff">进入系统 &rsaquo;</a>
+            </div>
+            <div class="home-footer">
+                <div class="home-info">
+                    <span>Manufacturing Base</span>
+                    <div>Zhejiang, China</div>
+                </div>
+                <div class="progress-block">
+                    <div class="progress-label"><span>Construction Progress</span><span>85%</span></div>
+                    <div class="bar-bg"><div class="bar-fill"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 【视图 1: 身份/资质】 -->
+        <section id="identity" class="view-pane">
+            <div class="identity-grid">
                 <div class="img-stack">
-                    <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" class="main" alt="Company">
-                    <img src="https://sc02.alicdn.com/kf/H1b779f27286e4fb58bae053611c52237O.png" class="sub" alt="Factory">
+                    <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" class="main">
+                    <img src="https://sc02.alicdn.com/kf/H1b779f27286e4fb58bae053611c52237O.png" class="sub">
                 </div>
-                <div class="id-content">
-                    <h4>Trust & Identity</h4>
-                    <h2>良益实业<br>信用资产背书</h2>
-                    <div class="id-grid">
-                        <div class="id-item">
-                            <span class="id-label">核心背书</span>
-                            <div class="id-val">15年户外休闲产品出口经验<br>通过多家 500 强企业深度审计</div>
-                        </div>
-                        <div class="id-item">
-                            <span class="id-label">资质文件</span>
-                            <div class="id-val">ISO 9001 体系认证<br>CE / RoHS / 实用新型专利(15项)</div>
-                        </div>
-                        <div class="id-item">
-                            <span class="id-label">智造能力</span>
-                            <div class="id-val">自有 R&D 研发中心<br>24小时快速出样能力</div>
-                        </div>
-                        <div class="id-item">
-                            <span class="id-label">身份资产</span>
-                            <div class="id-val">中英文名片、全尺寸 Logo<br>展厅与发货现场实拍库</div>
-                        </div>
+                <div class="id-text">
+                    <span class="label-sm" style="color:var(--accent-orange)">Trust & Identity</span>
+                    <h2>企业信用背书</h2>
+                    <div class="id-cards">
+                        <div class="id-card"><span class="label-sm">资质认证</span><p>ISO 9001, CE, RoHS, 15项专利</p></div>
+                        <div class="id-card"><span class="label-sm">工厂实拍</span><p>大楼全景、生产车间、展厅实测</p></div>
+                        <div class="id-card"><span class="label-sm">核心优势</span><p>24h出样, 自有研发, 15年外贸经验</p></div>
+                        <div class="id-card"><span class="label-sm">审计档案</span><p>通过多家 500 强企业第三方审计</p></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 端口 2: 产品/Q&A -->
-        <section id="products" class="port-view">
-            <div class="product-layout">
-                <div class="product-header">
-                    <h2>PRODUCT MATRIX</h2>
-                    <p style="color:var(--text-muted); letter-spacing:5px;">3-METER ROUND CLASSIC</p>
-                </div>
-                
+        <!-- 【视图 2: 产品/Q&A】 -->
+        <section id="products" class="view-pane">
+            <div class="product-matrix">
+                <h2 style="font-size:4rem; font-family:'Playfair Display'; font-weight:100;">PRODUCT MATRIX</h2>
                 <div class="spec-table">
-                    <div class="spec-cell"><span class="id-label">型号编码</span><div class="id-val">LY-300-RND</div></div>
-                    <div class="spec-cell"><span class="id-label">骨架规格</span><div class="id-val">8根全铁加固伞骨</div></div>
-                    <div class="spec-cell"><span class="id-label">面料材质</span><div class="id-val">280g 高密度色织布</div></div>
-                    <div class="spec-cell"><span class="id-label">毛重/包装</span><div class="id-val">8.0KG / 加强瓦楞纸箱</div></div>
-                    <div class="spec-cell"><span class="id-label">功能设计</span><div class="id-val">带摇手、带插销、带转向</div></div>
-                    <div class="spec-cell"><span class="id-label">MOQ</span><div class="id-val">100 PCS (现货) / 500 (定制)</div></div>
-                    <div class="spec-cell"><span class="id-label">价格体系</span><div class="id-val">FOB Ningbo: $42.00 - $58.00</div></div>
-                    <div class="spec-cell"><span class="id-label">BOM 工艺</span><div class="id-val">静电喷涂、精密注塑、组装</div></div>
+                    <div class="spec-cell"><span class="label-sm">型号名称</span><p>3米遮阳圆伞</p></div>
+                    <div class="spec-cell"><span class="label-sm">骨架规格</span><p>8根全铁加固骨</p></div>
+                    <div class="spec-cell"><span class="label-sm">面料材质</span><p>高密度色织布</p></div>
+                    <div class="spec-cell"><span class="label-sm">单品毛重</span><p>8.0 KGS</p></div>
                 </div>
-
-                <div class="qa-box">
-                    <h3 style="font-size:2rem; font-family:'Playfair Display'; margin-bottom:50px;">TECH Q&A 库</h3>
-                    <div class="qa-item">
-                        <div class="qa-q">Q: 产品如何保证在大风环境下的稳定性？</div>
-                        <div class="qa-a">A: 伞头采用双顶通风设计，有效泄压；伞骨壁厚由行业标准 0.5mm 提升至 0.8mm。</div>
-                    </div>
-                    <div class="qa-item">
-                        <div class="qa-q">Q: 色织布面料的防褪色能力如何？</div>
-                        <div class="qa-a">A: 采用原液着色技术，色牢度达欧标 4 级以上，户外暴晒 2 年无明显褪色。</div>
-                    </div>
+                <div class="qa-container">
+                    <h3 style="font-family:'Playfair Display'; font-size:1.5rem; margin-bottom:30px;">TECH Q&A 库</h3>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Q: 产品如何抗风？<br><span style="color:#fff">A: 采用双顶通风泄压设计，伞骨壁厚达 0.8mm。</span></p>
+                    <p style="color:var(--text-muted);">Q: 面料防褪色吗？<br><span style="color:#fff">A: 色织布采用原液着色，欧标4级色牢度。</span></p>
                 </div>
             </div>
         </section>
 
-        <!-- 端口 3: 情报/画像 -->
-        <section id="market" class="port-view">
-            <div class="market-layout">
-                <div class="bracket-quote">
-                    <span class="bracket">[</span>
-                    <h2 class="market-title">Intelligence</h2>
-                    <span class="bracket">]</span>
-                </div>
-                <div class="intel-wrap">
-                    <div class="intel-card">
-                        <h3>SEO 核心词库</h3>
-                        <div class="keyword">Patio Umbrella</div><div class="keyword">Garden Shade</div>
-                        <div class="keyword">Wholesale China</div><div class="keyword">Outdoor Living</div>
-                        <div class="keyword">Cantilever Umbrella</div>
-                    </div>
-                    <div class="intel-card">
-                        <h3>竞品深度对标</h3>
-                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:2;">
-                            <strong style="color:#fff">对手 A (低价型):</strong> 价格低15%，但使用回收塑料件，脆性大。<br>
-                            <strong style="color:#fff">对手 B (品牌型):</strong> 知名度高，但交期需 45 天，售后响应慢。
-                        </p>
-                    </div>
-                    <div class="intel-card">
-                        <h3>买家画像 (ICP)</h3>
-                        <div class="keyword">工程承包商 (Hotel/Cafe)</div>
-                        <div class="keyword">零售连锁超市</div>
-                        <div class="keyword">亚马逊品牌出海商</div>
-                    </div>
+        <!-- 【视图 3: 情报/画像】 -->
+        <section id="market" class="view-pane">
+            <div class="market-center">
+                <div class="bracket-quote"><span class="bracket">[</span><h2 style="font-size:4rem; font-family:'Playfair Display'; letter-spacing:10px;">INTELLIGENCE</h2><span class="bracket">]</span></div>
+                <div class="intel-grid">
+                    <div class="intel-card"><h3>SEO 词库</h3><p>Patio Umbrella, Garden Shade, Wholesale China</p></div>
+                    <div class="intel-card"><h3>竞品对标</h3><p>对手 A (低价型) vs 对手 B (品牌型) 深度对比</p></div>
+                    <div class="intel-card"><h3>买家画像</h3><p>工程承包商、零售超市、亚马逊大卖家</p></div>
                 </div>
             </div>
         </section>
 
-        <!-- 端口 4: 话术/SOP -->
-        <section id="sop" class="port-view">
-            <div class="sop-layout">
-                <div class="id-content">
-                    <h4>Efficiency</h4>
-                    <h2>销售作战话术库</h2>
-                    <p>业务员点击右侧卡片即可复制标准化回复，确保在 1 小时内给买家提供最专业的响应。</p>
+        <!-- 【视图 4: 话术/SOP】 -->
+        <section id="sop" class="view-pane">
+            <div class="sop-terminal-grid">
+                <div class="script-terminal">
+                    <div class="copy-tag" onclick="copy('Hello! Inquiry reply...')">CLICK TO COPY</div>
+                    <h3>询盘首回话术</h3>
+                    <p class="script-body" style="margin-top:20px;">"Thank you for the inquiry! Attached is our latest catalog. We offer the best EXW price for trial orders..."</p>
                 </div>
-                <div style="display:grid; gap:30px;">
-                    <div class="script-terminal">
-                        <div class="copy-btn" onclick="copy('Hello! Thank you for inquiring about Liangyi 3m umbrella...')">CLICK TO COPY</div>
-                        <div class="script-title">询盘首回话术</div>
-                        <div class="script-content">"Thank you for your interest! Attached is our latest catalog. We can offer a special EXW price for your trial order of 100 sets..."</div>
-                    </div>
-                    <div class="script-terminal">
-                        <div class="copy-btn" onclick="copy('Dear client, our production schedule is filling up for next month...')">CLICK TO COPY</div>
-                        <div class="script-title">紧迫感激活模板</div>
-                        <div class="script-content">"Our production schedule is filling up fast. Confirming your order now ensures shipment before the Peak Season freight hike..."</div>
-                    </div>
+                <div class="script-terminal">
+                    <div class="copy-tag" onclick="copy('Shipping schedule update...')">CLICK TO COPY</div>
+                    <h3>催付激活模板</h3>
+                    <p class="script-body" style="margin-top:20px;">"We have a shipping container to your region next week. Confirm now to save 10% on freight costs!"</p>
                 </div>
             </div>
         </section>
 
-        <!-- 端口 5: 品牌资产 -->
-        <section id="brand" class="port-view">
-            <div class="brand-layout">
-                <div class="asset-card">
-                    <h3>视觉规范</h3>
-                    <div><span class="color-circle" style="background:#080808"></span> #080808</div>
-                    <div style="margin-top:10px;"><span class="color-circle" style="background:#ff5c00"></span> #FF5C00</div>
-                    <p style="font-size:0.7rem; margin-top:20px; color:var(--text-muted)">字体: Playfair / Inter</p>
-                </div>
-                <div class="asset-card">
-                    <h3>媒体资源包</h3>
-                    <div class="id-val">15s 产品动态视频<br>4K 精修渲染图包<br>A+ 详情页模板</div>
-                </div>
-                <div class="asset-card">
-                    <h3>标杆案例库</h3>
-                    <div class="id-val">迪拜皇家酒店合作案<br>北美大型园艺商 OEM<br>客户好评实拍库</div>
-                </div>
-                <div class="asset-card">
-                    <h3>社媒矩阵</h3>
-                    <div class="id-val">TikTok: Liangyi_Outdoor<br>LinkedIn: 浙江良益休闲<br>发布排期表 v2.0</div>
-                </div>
+        <!-- 【视图 5: 品牌资产】 -->
+        <section id="brand" class="view-pane">
+            <div class="brand-assets">
+                <div class="asset-box"><h3>视觉规范</h3><p>#080808 / #FF5C00 / #2D5A27</p></div>
+                <div class="asset-box"><h3>媒体包</h3><p>15s 精修视频、4K 渲染图</p></div>
+                <div class="asset-box"><h3>标杆案例</h3><p>迪拜海滩酒店、北美园艺商合作</p></div>
+                <div class="asset-box"><h3>社媒矩阵</h3><p>TikTok / LinkedIn 发布排期表</p></div>
             </div>
         </section>
     </div>
 
     <script>
-        function switchPort(portId) {
-            // 切换导航状态
-            document.querySelectorAll('#main-nav li').forEach(li => li.classList.remove('active'));
-            document.getElementById('nav-' + portId).classList.add('active');
+        function switchView(viewId) {
+            // 切换导航激活状态
+            document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
+            if(viewId !== 'home') {
+                document.getElementById('nav-' + viewId).classList.add('active');
+            }
 
-            // 切换视图
-            document.querySelectorAll('.port-view').forEach(view => view.classList.remove('active'));
-            document.getElementById(portId).classList.add('active');
-
-            // 联动背景大标题
-            const titles = {
-                'identity': 'IDENTITY',
-                'products': 'INVENTORY',
-                'market': 'INSIGHTS',
-                'sop': 'OPERATE',
-                'brand': 'ASSETS'
-            };
-            document.querySelector('.bg-title').innerText = titles[portId];
+            // 切换视图内容
+            document.querySelectorAll('.view-pane').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
         }
 
         function copy(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('话术已成功存入剪贴板！');
+                alert('话术已成功复制到剪贴板！');
             });
         }
     </script>
