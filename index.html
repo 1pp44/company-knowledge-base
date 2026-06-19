@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIANGYI BIZ-BRAIN | 雕刻阳光的艺术 - 交互进化版</title>
+    <title>LIANGYI BIZ-BRAIN | 全量业务大脑终极版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
@@ -12,109 +12,73 @@
             --bg-color: #080808;
             --accent-orange: #ff5c00;
             --text-muted: rgba(255, 255, 255, 0.4);
-            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --border-soft: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.03);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --radius: 24px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* 隐藏默认鼠标，使用自定义光标 */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
+        body::after { content: ""; position: fixed; inset: 0; background-image: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; pointer-events: none; z-index: 9999; }
 
-        /* --- 趣味美工 1: 胶片颗粒感 --- */
-        body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.04; pointer-events: none; z-index: 9999;
-        }
+        /* 自定义光标 */
+        #cursor { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10000; mix-blend-mode: difference; }
+        #follower { position: fixed; width: 30px; height: 30px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; }
 
-        /* --- 趣味美工 2: 自定义交互光标 --- */
-        #custom-cursor {
-            position: fixed; width: 10px; height: 10px; background: #fff; border-radius: 50%;
-            pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: transform 0.1s;
-        }
-        #cursor-follower {
-            position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
-            pointer-events: none; z-index: 9999; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        header {
-            position: fixed; width: 100%; top: 0; z-index: 1000;
-            padding: 40px 60px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .logo-home { font-size: 1.1rem; letter-spacing: 5px; font-weight: 200; text-transform: uppercase; }
+        header { position: fixed; width: 100%; top: 0; z-index: 1000; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-home { font-size: 1.1rem; letter-spacing: 5px; font-weight: 200; text-transform: uppercase; cursor: pointer; }
         .logo-home span { color: var(--accent-orange); font-weight: 600; }
-        
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav ul li { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.4; transition: 0.3s; }
-        nav ul li:hover { opacity: 1; transform: translateY(-2px); }
+        nav ul li { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.4; transition: 0.3s; position: relative; }
+        nav ul li.active { opacity: 1; }
+        nav ul li.active::after { content: ""; position: absolute; bottom: -8px; left: 0; width: 100%; height: 1px; background: var(--accent-orange); }
 
         .viewport-container { height: 100vh; width: 100%; position: relative; }
-        .view-pane { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: var(--transition); overflow-y: auto; padding: 120px 60px; }
-        .view-pane.active { opacity: 1; visibility: visible; }
+        .view-pane { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: 0.8s cubic-bezier(0.23, 1, 0.32, 1); overflow-y: auto; padding: 120px 60px 80px; }
+        .view-pane.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- HOME: 动态趣味 Hero --- */
-        .home-view { padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
-        .hero-bg {
-            position: absolute; inset: 0;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat;
-            z-index: -1; transform: scale(1.05); transition: 10s linear;
-        }
-        .home-view.active .hero-bg { transform: scale(1); }
+        /* HOME */
+        .home-view { padding: 0; overflow-y: auto; overflow-x: hidden; }
+        .hero-section { height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; }
+        .hero-bg { position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat; z-index: -1; transition: 10s linear; }
+        .p-text { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); font-size: 18vw; font-family: 'Playfair Display'; text-transform: uppercase; letter-spacing: -8px; opacity: 0.6; pointer-events: none; white-space: nowrap; }
+        .p-text .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
 
-        /* 趣味美工 3: 视差位移文字 */
-        .parallax-text {
-            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
-            font-size: 18vw; font-family: 'Playfair Display'; text-transform: uppercase;
-            letter-spacing: -8px; line-height: 0.8; opacity: 0.6; pointer-events: none;
-            transition: 0.1s ease-out;
-        }
-        .parallax-text .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
+        /* 浮动交互点 */
+        .f-dot { position: absolute; width: 50px; height: 50px; background: rgba(255,92,0,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: float 4s infinite; cursor: pointer; }
+        .f-dot::after { content: ""; width: 8px; height: 8px; background: var(--accent-orange); border-radius: 50%; }
+        .f-label { position: absolute; left: 60px; width: 180px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 12px; font-size: 0.7rem; opacity: 0; transition: 0.3s; pointer-events: none; border: 1px solid var(--border-soft); }
+        .f-dot:hover .f-label { opacity: 1; transform: translateX(10px); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        .hero-main { padding: 0 10%; position: relative; z-index: 10; }
-        .hero-main h1 { 
-            font-size: 10vw; font-family: 'Playfair Display'; line-height: 0.8; 
-            margin-bottom: 20px; animation: revealText 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        @keyframes revealText { from { opacity:0; transform: translateY(100px); filter: blur(20px); } to { opacity:1; transform: translateY(0); filter: blur(0); } }
+        /* 产品矩阵 */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 50px; }
+        .p-card { background: var(--glass); border: 1px solid var(--border-soft); border-radius: 16px; overflow: hidden; transition: 0.4s; }
+        .p-card:hover { border-color: var(--accent-orange); transform: translateY(-10px); }
+        .p-card img { width: 100%; height: 320px; object-fit: cover; filter: brightness(0.9); transition: 0.4s; }
+        .p-card:hover img { filter: brightness(1.1); }
+        .p-info { padding: 25px; }
 
-        /* 趣味交互：橙色浮动点 */
-        .floating-dot {
-            position: absolute; width: 60px; height: 60px; background: rgba(255,92,0,0.2);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            animation: float 4s ease-in-out infinite; cursor: pointer; z-index: 20;
-        }
-        .floating-dot::after { content: ""; width: 12px; height: 12px; background: var(--accent-orange); border-radius: 50%; }
-        .dot-label { 
-            position: absolute; left: 80px; width: 200px; background: rgba(255,255,255,0.1); 
-            backdrop-filter: blur(10px); padding: 15px; border-radius: 12px; font-size: 0.7rem; 
-            opacity: 0; transform: translateX(-20px); transition: 0.4s; pointer-events: none;
-        }
-        .floating-dot:hover .dot-label { opacity: 1; transform: translateX(0); }
+        /* 备注编辑区 */
+        .note-area { margin-top: 40px; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--border-soft); }
+        .note-area textarea { width: 100%; height: 120px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 15px; border-radius: 8px; resize: none; outline: none; margin-bottom: 15px; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        /* 弹窗 */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; padding: 60px; }
+        .close { position: fixed; right: 40px; top: 40px; font-size: 2rem; cursor: pointer; color: var(--text-muted); }
 
-        /* 底部进度条趣味化 */
-        .home-footer { position: absolute; bottom: 60px; left: 10%; right: 10%; display: flex; justify-content: space-between; align-items: flex-end; }
-        .scroll-hint { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
-
-        /* 其他视图样式保持... */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .product-card { background: var(--glass); border: 1px solid var(--border-soft); border-radius: 20px; overflow: hidden; transition: 0.5s; }
-        .product-card:hover { border-color: var(--accent-orange); transform: scale(1.02); }
-        .product-card img { width: 100%; height: 300px; object-fit: cover; }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; padding: 60px; }
+        @media (max-width: 1024px) { .p-text { font-size: 25vw; } .product-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
-    <!-- 自定义鼠标 -->
-    <div id="custom-cursor"></div>
-    <div id="cursor-follower"></div>
+    <div id="cursor"></div><div id="follower"></div>
 
     <header>
-        <div class="logo-home">LIANGYI <span>.</span></div>
+        <div class="logo-home" onclick="switchView('home')">LIANGYI <span>.</span></div>
         <nav>
-            <ul>
-                <li onclick="switchView('home')">首页</li>
+            <ul id="nav-list">
+                <li onclick="switchView('home')" class="active">首页</li>
                 <li onclick="switchView('identity')">身份/资质</li>
                 <li onclick="switchView('products')">产品/Q&A</li>
                 <li onclick="switchView('market')">情报/画像</li>
@@ -124,98 +88,116 @@
     </header>
 
     <div class="viewport-container">
-        <!-- 【HOME 封面：趣味交互进化版】 -->
-        <section id="home" class="view-pane home-view active">
-            <div class="hero-bg"></div>
-            
-            <!-- 视差大标题 -->
-            <div class="parallax-text" id="p-text">
-                <span class="outline">Sculpting</span>
-                <span>Sunlight<span style="color:var(--accent-orange)">.</span></span>
-            </div>
-
-            <div class="hero-main">
-                <h1 style="font-weight: 200">Beyond<br>The Shade</h1>
-                <p style="max-width: 450px; font-weight: 200; font-size: 0.9rem; line-height: 2; color: var(--text-muted)">
-                    良益休闲：我们不只是制造遮阳伞，我们是在为您雕刻每一寸入户的光影。感受大数据驱动的户外建筑美学。
-                </p>
-            </div>
-
-            <!-- 趣味交互点 1 -->
-            <div class="floating-dot" style="top: 30%; right: 25%; animation-delay: -1s;">
-                <div class="dot-label">
-                    <strong>瓦尔登绿</strong><br>
-                    这款顶布色值取自 16:00 的林间湖泊，在大数据色彩研究中具有极佳的降噪感。
+        <!-- HOME: 趣味+故事 -->
+        <section id="home" class="view-pane active home-view">
+            <div class="hero-section">
+                <div class="hero-bg"></div>
+                <div class="p-text" id="p-text"><span class="outline">Sculpting</span> <span>Sunlight<span style="color:var(--accent-orange)">.</span></span></div>
+                <div style="padding: 0 10%; z-index: 10; position: relative;">
+                    <h1 style="font-size: 8vw; font-family: 'Playfair Display'; line-height: 1; font-weight: 200;">Outdoor<br>Architecture</h1>
+                    <p style="max-width: 400px; color: var(--text-muted); line-height: 2; margin-top: 30px;">良益休闲：定义阳光下的空间主权。基于大数据深度洞察，我们将每一把遮阳伞转化为可居住的艺术。 </p>
                 </div>
+                <div class="f-dot" style="top: 30%; right: 30%;"><div class="f-label"><strong>瓦尔登绿</strong><br>取自 16:00 湖泊色值，大数据研究显示其具有极佳的视觉降噪感。</div></div>
+                <div class="f-dot" style="bottom: 35%; right: 45%; animation-delay: -2s;"><div class="f-label"><strong>力学核心</strong><br>良益标准 0.8mm 伞骨壁厚，比行业均值提升 45% 抗风力。</div></div>
             </div>
-
-            <!-- 趣味交互点 2 -->
-            <div class="floating-dot" style="bottom: 40%; right: 40%; animation-delay: -2.5s;">
-                <div class="dot-label">
-                    <strong>力学核心</strong><br>
-                    0.8mm 壁厚伞骨隐藏在美学外壳下，可正面抵御 8 级强风。
-                </div>
-            </div>
-
-            <div class="home-footer">
-                <div class="scroll-hint">Scroll to explore the brain</div>
-                <div style="text-align: right">
-                    <span style="font-size: 0.6rem; opacity: 0.5">EDITION 2026</span>
-                    <div style="font-size: 1.2rem; font-weight: 200">PRO INTERACTIVE</div>
-                </div>
+            <!-- 品牌故事 -->
+            <div style="padding:150px 10%; background:#0a0a0a; display:grid; grid-template-columns:1.2fr 1fr; gap:80px; align-items:center;">
+                <div><h3 style="font-family:'Playfair Display'; font-size:3rem; margin-bottom:40px;">良品匠心 · 益于生活</h3><p style="color:var(--text-muted); line-height:2.2; font-weight:200;">良益坐落于台州临海，拥有20,000㎡智造基地。我们致力于将传统伞具转化为“动态雕塑”，通过力学与美学的精确平衡，让每一寸阴影都成为生活的艺术品。</p></div>
+                <img src="https://sc02.alicdn.com/kf/H71cf30214d28468da25f68886873dd96y.png" style="width:100%; border-radius:var(--radius); filter:grayscale(0.3);">
             </div>
         </section>
 
-        <!-- 其他视图 (保持内容，仅更新样式) -->
+        <!-- 身份 -->
         <section id="identity" class="view-pane">
-            <div style="padding:100px; text-align:center;"><h2>企业身份与背书</h2><p>15年实业沉淀，ISO/CE 证书已归档。</p></div>
+            <div style="padding:50px; text-align:center;"><h2 style="font-size:4rem; font-family:'Playfair Display'">TRUST ASSETS</h2><p style="color:var(--accent-orange); letter-spacing:5px; margin-top:20px;">ISO9001 / CE / 15项专利全激活</p></div>
         </section>
 
+        <!-- 产品：全量 14 款恢复 -->
         <section id="products" class="view-pane">
-            <div style="text-align:center;"><h2 style="font-size:3rem; font-family:'Playfair Display'">PRODUCT MATRIX</h2></div>
+            <div style="text-align:center;"><h2 style="font-size:4rem; font-family:'Playfair Display'; font-weight:100;">PRODUCT MATRIX</h2><p style="color:var(--accent-orange); letter-spacing:5px;">14 EXQUISITE STYLES WITH SMART NOTES</p></div>
             <div class="product-grid" id="u-list"></div>
         </section>
+
+        <!-- 情报 -->
+        <section id="market" class="view-pane">
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:30px;"><div style="background:var(--glass); padding:50px; border-radius:var(--radius);"><h3>2026 行业洞察</h3><p style="color:var(--text-muted); margin-top:20px;">大数据预测：轻量化玻纤骨架与太阳能集成将占据 60% 高端市场。</p></div><div style="background:var(--glass); padding:50px; border-radius:var(--radius);"><h3>对标</h3><p style="color:var(--text-muted); margin-top:20px;">良益 0.8mm 壁厚标准 vs 竞品 0.5mm，抗风性能提升 3 倍。</p></div></div>
+        </section>
+
+        <!-- 话术 -->
+        <section id="sop" class="view-pane">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:50px;"><div style="background:#111; padding:50px; border:1px solid var(--border-soft);"><h4 style="color:var(--accent-orange); letter-spacing:2px; font-size:0.6rem;">SCRIPT 01</h4><h3 style="margin:20px 0;">询盘首回话术</h3><p style="color:var(--text-muted); line-height:2;">"Hi! Thank you for inquiring about Liangyi 3m umbrellas. We guarantee 1h response and 48h sample shipping..."</p><button onclick="copy('...') " style="margin-top:20px; background:var(--accent-orange); border:none; padding:10px 20px; border-radius:20px; font-weight:600; cursor:pointer;">CLICK TO COPY</button></div></div>
+        </section>
     </div>
 
-    <!-- 弹窗系统... -->
-    <div id="product-modal" class="modal">
-        <div id="modal-content"></div>
-        <span onclick="this.parentElement.style.display='none'" style="position:fixed; top:50px; right:50px; font-size:2rem; cursor:pointer;">&times;</span>
-    </div>
+    <!-- 弹窗 -->
+    <div id="p-modal" class="modal"><span class="close" onclick="closeM()">&times;</span><div id="m-content" style="max-width:1200px; margin:0 auto;"></div></div>
 
     <script>
-        // --- 趣味交互 1: 视差与自定义鼠标 ---
-        const cursor = document.getElementById('custom-cursor');
-        const follower = document.getElementById('cursor-follower');
+        // 全量 14 款产品数据
+        const DATA = [
+            { id: 1, name: "咖色中柱伞", imgs: ["https://sc02.alicdn.com/kf/A3c5649436a3b486790e1583745136bb5p.png", "https://sc02.alicdn.com/kf/A7fbcfd9794cc4e6494d9066f286c5ba2H.png", "https://sc02.alicdn.com/kf/Ac6df1e6cdaa44a1f936e6f20e3da67548.png", "https://sc02.alicdn.com/kf/A82f494d5a419446eafff429d58d1854dC.png", "https://sc02.alicdn.com/kf/A89d7d4940ddb4fb4a810a54149b7581eu.png", "https://sc02.alicdn.com/kf/A910d1b326e214357b8331d3d9e2fa99cy.png", "https://sc02.alicdn.com/kf/A6678c654cfbc47238fdf3a9586d527a6t.png", "https://sc02.alicdn.com/kf/Ae59981f965b44f00aa9ed15ea745751dX.png"] },
+            { id: 2, name: "红色中柱伞", imgs: ["https://sc02.alicdn.com/kf/Acf90e43c3c65417a85c88c49f862512at.png", "https://sc02.alicdn.com/kf/A0ddf76296b23497d88c00f7ad87c425az.png", "https://sc02.alicdn.com/kf/A244ebb3825a04614a467f21d8fe12d6cG.png", "https://sc02.alicdn.com/kf/A67376635395a4ffeacb352e27f4461e96.png", "https://sc02.alicdn.com/kf/A938ba145474745169d8dad1e42ac3a3dI.png", "https://sc02.alicdn.com/kf/A5e624c2e6a7348eb802b0697b425909f2.png", "https://sc02.alicdn.com/kf/Aa2258548d0bb473cb9893ae6cd33127ec.png", "https://sc02.alicdn.com/kf/A5b0b3dbb7f7741cdbf25083c4363ea38W.png"] },
+            { id: 3, name: "青绿色3米中柱伞", imgs: ["https://sc02.alicdn.com/kf/Accbe104d57584c50b4876b5328332276R.png", "https://sc02.alicdn.com/kf/A153c9590ea65468ab7f5c8f1b8bc0db6Q.png", "https://sc02.alicdn.com/kf/A23509a5446cf475fabdb9707c663c7d7y.png", "https://sc02.alicdn.com/kf/Ab14eb304bdd844cf9c2d89f3d0041f8fq.png", "https://sc02.alicdn.com/kf/Aa6aac80c05764ddabb98476668060e0e4.png", "https://sc02.alicdn.com/kf/A87bd781442ef4917bd3d7cd059efcf27f.png", "https://sc02.alicdn.com/kf/Ac9103e6fa03a4898a3bef8c297392d7cH.png", "https://sc02.alicdn.com/kf/Ada8c40048e5e40b787f39a2d19ed19dcQ.png"] },
+            { id: 4, name: "深绿色中柱伞", imgs: ["https://sc02.alicdn.com/kf/Ab6260cb000ff4695bcf876cf225eb9b5Z.png", "https://sc02.alicdn.com/kf/A9384cbfbafdf481199f3d4a3cb18097fY.png", "https://sc02.alicdn.com/kf/Af5f3330b1b5d46b198864283792350bcU.png", "https://sc02.alicdn.com/kf/Aecd31d933b054f6e906d1785f228bcb7f.png", "https://sc02.alicdn.com/kf/Ad243c0cd2c75454b87b2fcb3ca3537137.png", "https://sc02.alicdn.com/kf/Abb2b499d0142458f91c8b68c6f71dd13a.png", "https://sc02.alicdn.com/kf/A2217a2abafeb4ee08102dd531de904f0g.png", "https://sc02.alicdn.com/kf/A4e1a9460d87b452a8cde94f2fe835e59a.png"] },
+            { id: 5, name: "红色罗马伞", imgs: ["https://sc02.alicdn.com/kf/Aaf0917df2a6f4251a6add4f0b7372d01o.png", "https://sc02.alicdn.com/kf/Aebd6403cab30499aad0cbbd6262d61d1S.png", "https://sc02.alicdn.com/kf/A0bf531fd5644459da55ae9cc2948511ac.png", "https://sc02.alicdn.com/kf/Aa836747b07144cd79c514e9583169423C.png", "https://sc02.alicdn.com/kf/A0811decf2ef2459985f8f7159c650685i.png", "https://sc02.alicdn.com/kf/Aa6214935fa8444bdbb54522af3cc6811F.png", "https://sc02.alicdn.com/kf/A991c72684b7e42d5b2a3a710df7520abg.png", "https://sc02.alicdn.com/kf/A206513d509094ce1a69804bd592d4daew.png"] },
+            { id: 6, name: "绿色波浪伞", imgs: ["https://sc02.alicdn.com/kf/Ada5fdb2bd4c447f282ed7970a8378ebdn.png", "https://sc02.alicdn.com/kf/A6dc47d574f1f422b97e1978ac209080bB.png", "https://sc02.alicdn.com/kf/Ac9b4018b36d14098b88c3ef4abcf5cafa.png", "https://sc02.alicdn.com/kf/A094f295825ba49b2bf404413598c7e3d1.png", "https://sc02.alicdn.com/kf/Af90928734b7f44048bd6e0f362b6943eU.png", "https://sc02.alicdn.com/kf/A41492b019e4746e1a1ea20439be127e2z.png", "https://sc02.alicdn.com/kf/Ab14eb304bdd844cf9c2d89f3d0041f8fq.png", "https://sc02.alicdn.com/kf/Ad601a8f4a91e4d2d8e0d0956cfd9c81cV.png"] },
+            { id: 7, name: "红色香蕉伞", imgs: ["https://sc02.alicdn.com/kf/Af0b7c6b34a194426999622689faa6e13R.png", "https://sc02.alicdn.com/kf/A07cf157f93b14c46b967efcab2a83ac2p.png", "https://sc02.alicdn.com/kf/Ad3ace12577dd4386be2e5c39bbb44d94B.png", "https://sc02.alicdn.com/kf/Ab9f8153f86054cdf96e91468b62120beL.png", "https://sc02.alicdn.com/kf/A4551eccaf2c64afa92a608508228e170e.png", "https://sc02.alicdn.com/kf/Aca6e5000cf13438aab88ca86b1595485j.png", "https://sc02.alicdn.com/kf/A24658dd40dcd46aca97d5defd4107b5b8.png", "https://sc02.alicdn.com/kf/Af31a96c27b6e4d10838d6dc0a28c03f94.png"] },
+            { id: 8, name: "蓝色转向伞", imgs: ["https://sc02.alicdn.com/kf/A0f740e8e4a274a6687552602d7a9710fD.png", "https://sc02.alicdn.com/kf/A842a964e196344b989a725bd889015e7B.png", "https://sc02.alicdn.com/kf/Ad26d3523d0894a63ada44c8ccc576c735.png", "https://sc02.alicdn.com/kf/A9e5c78e6193f4a3fb1fa947788c09e54N.png", "https://sc02.alicdn.com/kf/A8e4b6ba7762b43a297ffe19d10d79e50k.png", "https://sc02.alicdn.com/kf/A54611dadd7924ed2a6a6261bccca2919C.png"] },
+            { id: 9, name: "橙色摇手伞", imgs: ["https://sc02.alicdn.com/kf/A55e98362efcc415b98bcfeb16c6cf2166.png", "https://sc02.alicdn.com/kf/A0c4e6ca052a1482882706863abea2815n.png", "https://sc02.alicdn.com/kf/Aca001b87e2b4497f9e18c9e9724ac5e4H.png", "https://sc02.alicdn.com/kf/Af903e6675d744250b30cac1fde306f5bR.png", "https://sc02.alicdn.com/kf/Ae2fc120950f04035a14b3eef13f9eebbc.png"] },
+            { id: 10, name: "LED带转向伞", imgs: ["https://sc02.alicdn.com/kf/A7853fb09977b4a4b90e532b06ec8e3f3y.png", "https://sc02.alicdn.com/kf/A2d5a630a3eb644d59094a695ecec5a66F.png", "https://sc02.alicdn.com/kf/A7217c22ee1a24da28a5ec25ace2ed110e.png", "https://sc02.alicdn.com/kf/A4ec653787e27421a9671a442ab244be7M.png"] },
+            { id: 11, name: "米色带灯伞", imgs: ["https://sc02.alicdn.com/kf/Ad9ee3456ea9d49f596ac9d7f51c091d9l.png", "https://sc02.alicdn.com/kf/Aa3a03d2f08cc4208b67a40793ad310145.png", "https://sc02.alicdn.com/kf/Aa859fd692fdd4e2182119db9ac57f1cbN.png", "https://sc02.alicdn.com/kf/Afeb3f7f48b8e42628e64d691d8a3cb5dP.png"] },
+            { id: 12, name: "防雨中柱伞", imgs: ["https://sc02.alicdn.com/kf/Ae5e75defe1444979af5c94e800bcc387i.png", "https://sc02.alicdn.com/kf/A3cd3c64ba2aa4f72886399149384fb89Y.png", "https://sc02.alicdn.com/kf/A0bddb4b31b284e328fae7cd151ef6961z.png"] },
+            { id: 13, name: "18骨玻纤伞", imgs: ["https://sc02.alicdn.com/kf/Ad864f62ab3f741a09a4ccd05307e8b0bs.png", "https://sc02.alicdn.com/kf/A1c14d85003fd4d1c8581cb22f14b2708k.png", "https://sc02.alicdn.com/kf/A8c33e141097d4ab0a3bae0fb0e04fd0e2.png"] },
+            { id: 14, name: "粉紫小罗马伞", imgs: ["https://sc02.alicdn.com/kf/Ad5321f7899e34c4684286e38eaf4fbf1V.png", "https://sc02.alicdn.com/kf/A24f7ceff42ae40438f2150233c4d0e4cY.png"] }
+        ];
+
+        // 交互逻辑
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('follower');
         const pText = document.getElementById('p-text');
 
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            follower.style.left = e.clientX - 15 + 'px';
-            follower.style.top = e.clientY - 15 + 'px';
-
-            // 标题视差效果
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            follower.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
             const x = (window.innerWidth / 2 - e.clientX) / 50;
             const y = (window.innerHeight / 2 - e.clientY) / 50;
-            pText.style.transform = `translate(calc(-50% + ${x}px), ${y}px)`;
+            pText.style.transform = `translate3d(calc(-50% + ${x}px), ${y}px, 0)`;
         });
 
-        // --- 视图切换 ---
-        function switchView(viewId) {
+        function switchView(id) {
+            document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
+            if(id !== 'home') Array.from(document.querySelectorAll('nav ul li')).find(li => li.innerText.includes(id === 'identity' ? '身份' : id === 'products' ? '产品' : id === 'market' ? '情报' : '话术')).classList.add('active');
             document.querySelectorAll('.view-pane').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // --- 初始化产品矩阵 (示例 3 款) ---
-        const list = document.getElementById('u-list');
-        for(let i=1; i<=14; i++) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `<img src="https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png"> <div style="padding:20px;"><h4>款式 \${i}</h4><p style="font-size:0.6rem; opacity:0.5">CLICK FOR SPECS</p></div>`;
-            list.appendChild(card);
+        function initP() {
+            const list = document.getElementById('u-list');
+            DATA.forEach(u => {
+                const card = document.createElement('div'); card.className = 'p-card'; card.onclick = () => showD(u.id);
+                card.innerHTML = `<img src="${u.imgs[0]}"><div class="p-info"><h4>${u.name}</h4><p style="font-size:0.6rem; opacity:0.5;">8 VIEW ANGLES READY</p></div>`;
+                list.appendChild(card);
+            });
         }
+
+        function showD(id) {
+            const u = DATA.find(x => x.id === id);
+            const saved = localStorage.getItem(`note_${id}`) || "在此处输入产品内部备注...";
+            document.getElementById('m-content').innerHTML = `
+                <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin-bottom:50px;">${u.name}</h2>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">${u.imgs.map(img => `<img src="${img}" style="width:100%; border-radius:4px;">`).join('')}</div>
+                <div class="note-area"><span style="font-size:0.6rem; color:var(--accent-orange); letter-spacing:2px;">PRODUCT NOTE / 内部备注</span><textarea id="n-input-${id}">${saved}</textarea><button onclick="saveN(${id})" style="background:var(--accent-orange); border:none; padding:10px 25px; border-radius:20px; cursor:pointer; font-weight:600;">SAVE NOTE</button></div>`;
+            document.getElementById('p-modal').style.display = 'block';
+        }
+
+        function saveN(id) {
+            localStorage.setItem(`note_${id}`, document.getElementById(`n-input-${id}`).value);
+            alert('备注已保存！');
+        }
+
+        function closeM() { document.getElementById('p-modal').style.display = 'none'; }
+        initP();
     </script>
 </body>
 </html>
