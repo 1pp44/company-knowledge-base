@@ -22,7 +22,8 @@
 
     .splash { position:fixed; inset:0; z-index:10000; background:#000; display:grid; place-items:center; transition:opacity 1s ease, visibility 1s ease; overflow:hidden; }
     .splash.hidden { opacity:0; visibility:hidden; pointer-events:none; }
-    .intro-scene { position:absolute; inset:0; overflow:hidden; background:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.22)),url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat; transform:scale(1.08); animation:introZoom 7s ease-in-out infinite alternate; }
+    .intro-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.9; background:#000; }
+    .intro-scene { position:absolute; inset:0; overflow:hidden; background:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.22)),url('https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png') center/cover no-repeat; transform:scale(1.08); animation:introZoom 7s ease-in-out infinite alternate; opacity:.48; pointer-events:none; }
     .intro-umbrella { position:absolute; inset:-10%; background:radial-gradient(circle at 65% 42%,rgba(255,92,0,.28),transparent 0 5%,transparent 19%),linear-gradient(110deg,transparent 0 45%,rgba(23,61,50,.35) 45% 62%,transparent 62%); mix-blend-mode:screen; animation:introDrift 8s ease-in-out infinite alternate; }
     .intro-rays { position:absolute; inset:0; background:linear-gradient(105deg,transparent 0 18%,rgba(255,255,255,.08) 22%,transparent 34%),linear-gradient(132deg,transparent 0 48%,rgba(255,92,0,.12) 50%,transparent 64%); filter:blur(1px); animation:rayMove 6s ease-in-out infinite alternate; }
     .intro-grain { position:absolute; inset:0; opacity:.08; background-image:radial-gradient(rgba(255,255,255,.9) .55px,transparent .55px); background-size:4px 4px; }
@@ -93,7 +94,8 @@
 </head>
 <body>
   <div id="splash" class="splash">
-    <div id="introVideo" class="intro-scene" aria-label="LIANGYI 入场动画">
+    <video id="introVideo" class="intro-video" muted playsinline preload="metadata" poster="https://sc02.alicdn.com/kf/Hec281ecb772644bb88614071611e07e2N.png" src="intro.mp4"></video>
+    <div class="intro-scene intro-fallback" aria-hidden="true">
       <div class="intro-umbrella"></div>
       <div class="intro-rays"></div>
       <div class="intro-grain"></div>
@@ -101,12 +103,12 @@
     <div class="splash-panel">
       <div class="eyebrow">LIANGYI INTRO FILM</div>
       <h1>Before<br>The Shade</h1>
-      <p>轻量入场动画已启用，避免视频解码白屏；点击播放可触发光影动效，或直接进入网站。</p>
+      <p>点击播放入场视频；如浏览器限制播放，将保留光影动效兜底，也可直接进入网站。</p>
       <div class="splash-actions">
         <button class="intro-btn" onclick="playIntro()">PLAY INTRO / 播放入场动画</button>
         <button class="skip" onclick="enterSite()">ENTER SITE / 进入网站</button>
       </div>
-      <div id="videoStatus" class="video-status">当前使用轻量 CSS 入场动画，保证所有浏览器稳定显示。</div>
+      <div id="videoStatus" class="video-status">视频文件已植入网站；点击播放即可显示，失败时自动保留轻量动画兜底。</div>
     </div>
   </div>
   <div id="cursor"></div><div id="follower"></div>
@@ -138,11 +140,22 @@
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
     const splash = $('#splash'); const intro = $('#introVideo'); const videoStatus = $('#videoStatus');
-    function enterSite() { splash.classList.add('hidden'); }
+    function enterSite() { splash.classList.add('hidden'); try { intro.pause(); } catch(e) {} }
     function playIntro() {
       splash.classList.add('playing');
-      if (videoStatus) videoStatus.textContent = '光影入场动画正在播放，3 秒后进入网站...';
-      setTimeout(enterSite, 3000);
+      if (videoStatus) videoStatus.textContent = '正在播放入场视频...';
+      try { intro.currentTime = 0; } catch(e) {}
+      const p = intro.play && intro.play();
+      if (p && p.catch) {
+        p.catch(() => {
+          if (videoStatus) videoStatus.textContent = '浏览器拦截播放，请点击视频画面左下角播放键，或直接进入网站。';
+        });
+      }
+    }
+    if (intro && intro.addEventListener) {
+      intro.addEventListener('ended', enterSite);
+      intro.addEventListener('canplay', () => { if (videoStatus) videoStatus.textContent = '视频已就绪，点击 PLAY INTRO 播放。'; });
+      intro.addEventListener('error', () => { if (videoStatus) videoStatus.textContent = '视频暂时无法加载，已保留轻量光影兜底，可直接进入网站。'; });
     }
     function switchView(id) { $$('.view').forEach(v=>v.classList.remove('active')); $('#'+id).classList.add('active'); $$('#nav li').forEach(li=>li.classList.toggle('active', li.dataset.view===id)); }
     $$('#nav li').forEach(li => li.addEventListener('click', () => switchView(li.dataset.view)));
