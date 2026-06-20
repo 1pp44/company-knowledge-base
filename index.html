@@ -40,6 +40,10 @@
     .intro-btn { background:var(--accent); color:#111; border-color:var(--accent); font-weight:800; }
     .intro-btn:hover,.skip:hover { transform:translateY(-2px); filter:brightness(1.08); }
     .video-status { color:rgba(255,255,255,.58); font-size:12px; letter-spacing:1px; margin-top:18px; min-height:18px; }
+    .splash.playing .splash-panel { opacity:0; visibility:hidden; transform:translateY(18px) scale(.98); pointer-events:none; transition:.45s ease; }
+    .playing-skip { position:absolute; right:38px; top:34px; z-index:3; opacity:0; visibility:hidden; border:1px solid rgba(255,255,255,.36); color:#fff; background:rgba(0,0,0,.32); padding:12px 22px; border-radius:999px; letter-spacing:2px; font-size:12px; backdrop-filter:blur(10px); }
+    .splash.playing .playing-skip { opacity:1; visibility:visible; }
+    .splash.playing .intro-fallback { opacity:.12; }
 
     header { position:fixed; top:0; left:0; width:100%; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:34px 58px; background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,0)); }
     .logo { letter-spacing:7px; font-weight:200; font-size:17px; } .logo span { color:var(--accent); }
@@ -143,7 +147,7 @@
     function enterSite() { splash.classList.add('hidden'); try { intro.pause(); } catch(e) {} }
     function playIntro() {
       splash.classList.add('playing');
-      if (videoStatus) videoStatus.textContent = '正在播放入场视频...';
+      if (videoStatus) videoStatus.textContent = '正在播放入场视频，视频结束后自动进入网站...';
       try { intro.currentTime = 0; } catch(e) {}
       const p = intro.play && intro.play();
       if (p && p.catch) {
