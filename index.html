@@ -44,7 +44,9 @@
     .splash.playing .splash-panel { opacity:0; visibility:hidden; transform:translateY(18px) scale(.98); pointer-events:none; transition:.45s ease; }
     .playing-skip { position:absolute; right:38px; top:34px; z-index:3; opacity:0; visibility:hidden; border:1px solid rgba(255,255,255,.36); color:#fff; background:rgba(0,0,0,.32); padding:12px 22px; border-radius:999px; letter-spacing:2px; font-size:12px; backdrop-filter:blur(10px); }
     .splash.playing .playing-skip { opacity:1; visibility:visible; }
-    .splash.playing .intro-fallback { opacity:.12; }
+    .splash.playing .intro-fallback { opacity:0; visibility:hidden; }
+    .splash.playing::after { opacity:0; visibility:hidden; }
+    .splash.playing .intro-video { z-index:2; opacity:1; }
 
     header { position:fixed; top:0; left:0; width:100%; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:34px 58px; background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,0)); }
     .logo { letter-spacing:7px; font-weight:200; font-size:17px; } .logo span { color:var(--accent); }
