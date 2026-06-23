@@ -114,6 +114,10 @@
     .settings-form small { display:block; color:var(--muted); margin-top:8px; line-height:1.6; }
     .settings-list { margin-top:18px; color:var(--muted); font-size:13px; line-height:1.8; }
     .danger-btn { background:transparent; color:#ff8a65; border:1px solid rgba(255,138,101,.45); }
+    .manual-list-item { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--soft); }
+    .manual-list-item b { color:#fff; font-weight:400; }
+    .manual-list-item span { display:block; color:var(--muted); font-size:12px; margin-top:4px; }
+    .delete-mini { border:1px solid rgba(255,138,101,.45); background:transparent; color:#ff8a65; padding:5px 10px; border-radius:999px; font-size:12px; white-space:nowrap; }
 
 
     @media(max-width:960px) { header { padding:24px; align-items:flex-start; } nav ul { gap:14px; } .view { padding:110px 22px 60px; } .story,.cols-2,.cols-3,.cols-4 { grid-template-columns:1fr; } .concepts,.flow,.detail-images { grid-template-columns:1fr 1fr; } .hero-copy h1 { font-size:18vw; } .mega { font-size:25vw; } }
@@ -212,9 +216,38 @@
     function renderManualIdentity() {
       const wrap = $('#manualIdentityGrid'); if (!wrap) return; wrap.innerHTML = loadStore(STORE_KEYS.identity).map(x=>`<div class="card"><h3>${x.title}</h3><p>${x.text}</p></div>`).join('');
     }
+    function manualTitle(key, item) {
+      if (key === STORE_KEYS.products) return item.name || item.code || '未命名产品';
+      if (key === STORE_KEYS.scripts) return item.title || item.category || '未命名话术';
+      return item.title || '未命名内容';
+    }
+    function manualDesc(key, item) {
+      if (key === STORE_KEYS.products) return [item.code, (item.imgs||[]).length + '张图'].filter(Boolean).join(' · ');
+      if (key === STORE_KEYS.scripts) return [item.category, item.text].filter(Boolean).join(' · ').slice(0, 80);
+      return (item.text || '').slice(0, 80);
+    }
+    function renderManualList(key, elId, emptyText) {
+      const el = $('#' + elId); if (!el) return;
+      const list = loadStore(key);
+      if (!list.length) { el.textContent = emptyText; return; }
+      el.innerHTML = list.map((item, idx) => `<div class="manual-list-item"><div><b>${manualTitle(key,item)}</b><span>${manualDesc(key,item)}</span></div><button class="delete-mini" onclick="deleteManualItem('${key}', ${idx})">删除</button></div>`).join('');
+    }
+    function deleteManualItem(key, idx) {
+      const list = loadStore(key);
+      const item = list[idx];
+      if (!item) return;
+      if (!confirm('确认删除：' + manualTitle(key, item) + '？')) return;
+      list.splice(idx, 1);
+      saveStore(key, list);
+      renderProducts($('#productSearch') ? $('#productSearch').value : '');
+      renderScripts($('#scriptSearch') ? $('#scriptSearch').value : '');
+      renderManualMarket(); renderManualIdentity(); renderSettingsLists();
+    }
     function renderSettingsLists() {
-      const map = [[STORE_KEYS.products,'settingsProductList','个手动产品'],[STORE_KEYS.scripts,'settingsScriptList','条手动话术'],[STORE_KEYS.market,'settingsMarketList','条客户情报'],[STORE_KEYS.identity,'settingsIdentityList','条资质背书']];
-      map.forEach(([key,id,label]) => { const el = $('#'+id); if (el) el.textContent = '已保存 ' + loadStore(key).length + label; });
+      renderManualList(STORE_KEYS.products, 'settingsProductList', '暂无手动产品');
+      renderManualList(STORE_KEYS.scripts, 'settingsScriptList', '暂无手动话术');
+      renderManualList(STORE_KEYS.market, 'settingsMarketList', '暂无客户情报');
+      renderManualList(STORE_KEYS.identity, 'settingsIdentityList', '暂无资质背书');
     }
     function clearManualContent() {
       if (!confirm('确认清空所有手动新增内容？')) return;
